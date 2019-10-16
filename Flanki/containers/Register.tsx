@@ -6,24 +6,25 @@ type Props = {
   navigation: NavigationStackProp;
 };
 
-export const Login = ({ navigation }: Props) => {
+export const Register = ({ navigation }: Props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const inputChangeHandler = (changeFn: (text: string) => void) => (text: string) => changeFn(text);
 
   const handleSubmit = () => {
-    if (username !== "tajny" && password !== "xd")
-      Toast.show({
-        text: "Wrong credentials",
-        buttonText: "Ok :("
-      });
-    else {
-      navigation.navigate("PrivateStack");
-    }
+    // if (username !== "tajny" && password !== "xd")
+    //   Toast.show({
+    //     text: "Wrong credentials",
+    //     buttonText: "Ok :("
+    //   });
+    // else {
+    //   navigation.navigate("PrivateStack");
+    // }
   };
 
-  const moveToRegister = () => navigation.navigate("RegisterStack");
+  const moveToLogin = () => navigation.navigate("AuthStack");
 
   return (
     <Container>
@@ -34,6 +35,10 @@ export const Login = ({ navigation }: Props) => {
             <Input value={username} onChangeText={inputChangeHandler(setUsername)} />
           </Item>
           <Item style={{ marginTop: 10 }} regular stackedLabel last>
+            <Label>Email</Label>
+            <Input value={email} onChangeText={inputChangeHandler(setEmail)} />
+          </Item>
+          <Item style={{ marginTop: 10 }} regular stackedLabel last>
             <Label>Password</Label>
             <Input
               secureTextEntry
@@ -42,10 +47,10 @@ export const Login = ({ navigation }: Props) => {
             />
           </Item>
           <Button onPress={handleSubmit} block style={{ marginTop: 10 }}>
-            <Text>Login</Text>
-          </Button>
-          <Button onPress={moveToRegister} block style={{ marginTop: 10 }}>
             <Text>Register</Text>
+          </Button>
+          <Button onPress={moveToLogin} block style={{ marginTop: 10 }}>
+            <Text>Already have an account?</Text>
           </Button>
         </Form>
       </Content>
@@ -53,8 +58,8 @@ export const Login = ({ navigation }: Props) => {
   );
 };
 
-Login.navigationOptions = {
-  title: "Login"
+Register.navigationOptions = {
+  title: "Register"
 };
 
-export default Login;
+export default Register;

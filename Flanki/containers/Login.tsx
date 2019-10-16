@@ -1,26 +1,37 @@
 import React, { useState } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
 import { Container, Content, Form, Item, Input, Label, Button, Text, Toast } from "native-base";
+import api from "../utils/api";
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
 export const Login = ({ navigation }: Props) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const inputChangeHandler = (changeFn: (text: string) => void) => (text: string) => changeFn(text);
 
   const handleSubmit = () => {
-    if (username !== "tajny" && password !== "xd")
-      Toast.show({
-        text: "Wrong credentials",
-        buttonText: "Ok :("
+    api
+      .login({
+        email,
+        password: password
+      })
+      .then(({ ok, data }) => {
+        if (ok) {
+          api.setAuthorizationHeader(data as string);
+          navigation.navigate("PrivateStack");
+        } else {
+          Toast.show({
+            type: "danger",
+            //@ts-ignore
+            text: data.message || "Server error try again",
+            buttonText: "Ok"
+          });
+        }
       });
-    else {
-      navigation.navigate("PrivateStack");
-    }
   };
 
   const moveToRegister = () => navigation.navigate("RegisterStack");
@@ -31,7 +42,7 @@ export const Login = ({ navigation }: Props) => {
         <Form>
           <Item regular stackedLabel last>
             <Label>Username</Label>
-            <Input value={username} onChangeText={inputChangeHandler(setUsername)} />
+            <Input value={email} onChangeText={inputChangeHandler(setEmail)} />
           </Item>
           <Item style={{ marginTop: 10 }} regular stackedLabel last>
             <Label>Password</Label>

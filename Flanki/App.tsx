@@ -21,7 +21,7 @@ const AppContainer = createAppContainer(
       RegisterStack
     },
     {
-      initialRouteName: "PrivateStack"
+      initialRouteName: "AuthStack"
     }
   )
 );

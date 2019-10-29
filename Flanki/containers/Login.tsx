@@ -1,23 +1,29 @@
 import React, { useState } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
-import { Container, Content, Form, Item, Input, Label, Button, Text, Toast } from "native-base";
+import { Container, Content, Form, Button, Text, Toast } from "native-base";
+import { Formik } from 'formik'
+import Input from '../components/input'
+import * as Yup from 'yup'
 import api from "../utils/api";
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required('Fill username'),
+  password: Yup.string().required('Fill password')
+})
+
+
 export const Login = ({ navigation }: Props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const initialValues = { username: '', password: '' }
 
-  const inputChangeHandler = (changeFn: (text: string) => void) => (text: string) => changeFn(text);
-
-  const handleSubmit = () => {
+  const handleSubmit = ({ username, password }) => {
     api
       .login({
-        email,
-        password: password
+        email: username,
+        password
       })
       .then(({ ok, data }) => {
         if (ok) {
@@ -40,21 +46,39 @@ export const Login = ({ navigation }: Props) => {
     <Container>
       <Content contentContainerStyle={{ justifyContent: "center", flex: 1, padding: 20 }}>
         <Form>
-          <Item regular stackedLabel last>
-            <Label>Username</Label>
-            <Input value={email} onChangeText={inputChangeHandler(setEmail)} />
-          </Item>
-          <Item style={{ marginTop: 10 }} regular stackedLabel last>
-            <Label>Password</Label>
-            <Input
-              secureTextEntry
-              value={password}
-              onChangeText={inputChangeHandler(setPassword)}
-            />
-          </Item>
-          <Button onPress={handleSubmit} block style={{ marginTop: 10 }}>
-            <Text>Login</Text>
-          </Button>
+          <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+            {({
+              values: { username, password },
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting
+            }) => {
+              return <>
+                <Input
+                  value={username}
+                  label="Username"
+                  onChange={handleChange('username')}
+                  error={touched.username && (errors.username as string)}
+                  onBlur={handleBlur('username')}
+                />
+                <Input
+                  value={password}
+                  isSecure
+                  label="Password"
+                  onChange={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  error={touched.password && (errors.password as string)}
+                />
+                <Button onPress={handleSubmit} block style={{ marginTop: 10 }}>
+                  <Text>Login</Text>
+                </Button>
+              </>
+            }}
+          </Formik>
+
           <Button onPress={moveToRegister} block style={{ marginTop: 10 }}>
             <Text>Register</Text>
           </Button>

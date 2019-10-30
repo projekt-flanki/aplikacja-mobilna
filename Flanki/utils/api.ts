@@ -1,5 +1,5 @@
 import apisauce from 'apisauce'
-import  {LoginPayload, RegisterPayload} from '../typings'
+import  {LoginPayload, RegisterPayload, NewEventPayload} from '../typings'
 
 const baseURL = "http://40.68.3.243:8080/"
 
@@ -20,6 +20,7 @@ const create = () => {
 
   //protected
   const getUserInfo = () => api.get('user/info')
+  const addEvent = (addEventPayload: NewEventPayload) => api.post(`event/create`,addEventPayload)
 
   const logout = () => delete api.headers['Authorization']
 
@@ -27,6 +28,7 @@ const create = () => {
     login,
     logout,
     register,
+    addEvent,
     setAuthorizationHeader,
     getUserInfo
   }

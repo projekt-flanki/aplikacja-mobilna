@@ -11,3 +11,8 @@ export interface UserInfoPayload {
   email: string;
   username: string;
 }
+
+export interface NewEventPayload{
+  name: string;
+  
+}

@@ -39,6 +39,9 @@ export const Login = ({ navigation }: Props) => {
         }
       });
   };
+  const moveToAddEvent = () => {
+    navigation.navigate("AddEvent");
+  }
 
   const moveToRegister = () => navigation.navigate("RegisterStack");
 
@@ -72,7 +75,8 @@ export const Login = ({ navigation }: Props) => {
                   onBlur={handleBlur('password')}
                   error={touched.password && (errors.password as string)}
                 />
-                <Button onPress={handleSubmit} block style={{ marginTop: 10 }}>
+                {/* <Button onPress={handleSubmit} block style={{ marginTop: 10 }}> */}
+                <Button onPress={moveToAddEvent} block style={{ marginTop: 10 }}>
                   <Text>Login</Text>
                 </Button>
               </>

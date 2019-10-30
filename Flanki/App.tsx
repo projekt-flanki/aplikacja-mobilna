@@ -6,19 +6,22 @@ import { Root } from "native-base";
 import Login from "./containers/Login";
 import Register from "./containers/Register";
 import HomeScreen from "./containers/HomeScreen";
+import AddEvent from "./containers/AddEvent";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 const AuthStack = createStackNavigator({ Login });
 const PrivateStack = createStackNavigator({ HomeScreen });
 const RegisterStack = createStackNavigator({ Register });
+const AddEventStack = createStackNavigator({ AddEvent });
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
       PrivateStack,
       AuthStack,
-      RegisterStack
+      RegisterStack,
+      AddEventStack
     },
     {
       initialRouteName: "AuthStack"

@@ -6,9 +6,10 @@ import {
   Body,
   Title,
   Left,
-  Right,
+  Thumbnail,
   Content,
-  DatePicker
+  DatePicker,
+  Button
 } from "native-base";
 import { View, Text } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -17,12 +18,13 @@ import Input from "../components/input";
 type Props = {
   navigation: NavigationStackProp;
 };
-
+const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 export const AddEvent = ({ navigation }: Props) => {
   const goToMenu = () => {
     navigation.navigate("AuthStack");
   };
   const emptyFunction = () => {};
+
   return (
     <Container>
       <Header>
@@ -61,13 +63,19 @@ export const AddEvent = ({ navigation }: Props) => {
           error="Wypełnij poprawny opis"
           onBlur={emptyFunction}
         />
+        <Input
+          value=""
+          label="Wybierz godzinę"
+          onChange={emptyFunction}
+          error="Poprawny format 20:45"
+          onBlur={emptyFunction}
+        />
 
-        <View style={{ flex: 0, flexDirection: "row", alignItems: "center"  }}>
+        <View style={{ flex: 0, flexDirection: "row", alignItems: "center", marginTop: 10  }}>
           <Icon name="calendar" />
           <Text> Wybierz datę</Text>
-          <Text>                  </Text>
+          <Text> </Text>
           <DatePicker
-            
             defaultDate={new Date(2019, 4, 4)}
             minimumDate={new Date(2019, 1, 1)}
             maximumDate={new Date(2019, 12, 31)}
@@ -78,31 +86,25 @@ export const AddEvent = ({ navigation }: Props) => {
             androidMode={"spinner"}
             placeHolderText="  /  /  "
             textStyle={{ color: "#040404" }}
-            placeHolderTextStyle={{ color: "#EFF0F3",borderBottomColor: "#B4BEC5", backgroundColor: "#B4BEC5"  }}
+            placeHolderTextStyle={{
+              color: "#EFF0F3",
+              borderBottomColor: "#B4BEC5",
+              backgroundColor: "#B4BEC5"
+            }}
             onDateChange={this.setDate}
             disabled={false}
           />
         </View>
+        <View style={{ flex: 0, flexDirection: "row", alignItems: "center", marginTop: 10 }}>
+          <Icon name="paperclip" />
+          <Text> Wybierz zdjęcie do wydarzenia</Text>
+          <Text> </Text>
+          <Thumbnail small source={{ uri }} />
+        </View>
 
-        {/* <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <View style={{ width: 100, height: 50 }}>
-            <Icon name="user" size={24} color="black" style={{ width: 40 }} />
-            <Input 
-              value="XD"
-              label="Nazwa wydarzenia"
-              onChange={goToMenu}
-              error="xd"
-              onBlur={goToMenu}
-            />
-          </View>
-          
-        </View> */}
+        <Button full light style={{ marginTop: 10 }}>
+          <Text>Utwórz wydarzenie</Text>
+        </Button>
       </Content>
     </Container>
   );

@@ -40,7 +40,7 @@ export const AddEvent = ({ navigation }: Props) => {
   const goToMenu = () => {
     navigation.navigate("AuthStack");
   };
-  const handleCreate = ({
+  const handleSubmit = ({
     eventname,
     location,
     date,
@@ -88,7 +88,7 @@ export const AddEvent = ({ navigation }: Props) => {
       <Form>
         <Formik
           initialValues={initialValues}
-          onSubmit={handleCreate}
+          onSubmit={handleSubmit}
           validationSchema={validationSchema}
         >
           {({
@@ -184,7 +184,7 @@ export const AddEvent = ({ navigation }: Props) => {
                   </View>
 
                   <Button
-                    onPress={handleCreate}
+                    onPress={handleSubmit}
                     full
                     light
                     style={{ marginTop: 10 }}

@@ -27,7 +27,6 @@ const initialValues = {
   eventname: "",
   location: "",
   date: "",
-  ownerIds: "",
   description: ""
 };
 const validationSchema = Yup.object().shape({
@@ -44,7 +43,6 @@ export const AddEvent = ({ navigation }: Props) => {
     eventname,
     location,
     date,
-    ownerIds,
     description
   }) => {
     api
@@ -52,7 +50,6 @@ export const AddEvent = ({ navigation }: Props) => {
         name: eventname,
         location: location,
         date: date,
-        ownerIds: ownerIds,
         description: description
       })
       .then(({ ok, data }) => {
@@ -73,7 +70,7 @@ export const AddEvent = ({ navigation }: Props) => {
         }
       });
   };
-  const emptyFunction = () => {};
+  
 
   return (
     <Container>

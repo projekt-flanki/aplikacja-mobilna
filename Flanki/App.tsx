@@ -21,7 +21,7 @@ const AppContainer = createAppContainer(
       PrivateStack,
       AuthStack,
       RegisterStack,
-        DrawerOpen
+      DrawerOpen
     },
     {
       initialRouteName: "AuthStack"

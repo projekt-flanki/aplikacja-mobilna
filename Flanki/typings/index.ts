@@ -17,4 +17,5 @@ export interface NewEventPayload{
   location: string;
   date: string;
   ownerIds: string
+  description: string
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
-import { Container, Content, Form, Button, Text, Toast } from "native-base";
+import {Container, Content, Form, Button, Text, Toast, Header, Left, Icon} from "native-base";
 import { Formik } from 'formik'
 import Input from '../components/input'
 import * as Yup from 'yup'
@@ -44,6 +44,16 @@ export const Login = ({ navigation }: Props) => {
 
   return (
     <Container>
+      <Header>
+        <Left>
+          <Button
+              transparent
+              onPress={() => navigation.navigate("DrawerOpen")}
+          >
+            <Icon name="menu" />
+          </Button>
+        </Left>
+      </Header>
       <Content contentContainerStyle={{ justifyContent: "center", flex: 1, padding: 20 }}>
         <Form>
           <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>

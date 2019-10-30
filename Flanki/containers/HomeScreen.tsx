@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
-  Container,
-  Content,
-  Text,
-  Header,
-  Body,
-  Right,
-  Button,
-  Title,
-  Thumbnail,
-  Spinner
+    Container,
+    Content,
+    Text,
+    Header,
+    Body,
+    Right,
+    Button,
+    Title,
+    Thumbnail,
+    Spinner, Icon, Left
 } from "native-base";
 import { NavigationStackProp } from "react-navigation-stack";
 import { View } from "react-native";

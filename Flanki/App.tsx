@@ -8,17 +8,20 @@ import Register from "./containers/Register";
 import HomeScreen from "./containers/HomeScreen";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+import SideBar from "./containers/Sidebar";
 
 const AuthStack = createStackNavigator({ Login });
 const PrivateStack = createStackNavigator({ HomeScreen });
 const RegisterStack = createStackNavigator({ Register });
+const DrawerOpen = createStackNavigator( {SideBar});
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
       PrivateStack,
       AuthStack,
-      RegisterStack
+      RegisterStack,
+        DrawerOpen
     },
     {
       initialRouteName: "AuthStack"

@@ -6,14 +6,43 @@ import { Root } from "native-base";
 import Login from "./containers/Login";
 import Register from "./containers/Register";
 import HomeScreen from "./containers/HomeScreen";
+import MyEvents from "./containers/MyEvents";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import SideBar from "./containers/Sidebar";
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import TempPage from "./containers/TempPage";
 
 const AuthStack = createStackNavigator({ Login });
 const PrivateStack = createStackNavigator({ HomeScreen });
 const RegisterStack = createStackNavigator({ Register });
-const DrawerOpen = createStackNavigator( {SideBar});
+// const DrawerOpen = createStackNavigator( {SideBar});
+const MyEventsStack = createStackNavigator({ MyEvents });
+const TempStack = createStackNavigator({ TempPage });
+
+
+const HomeScreenRouter = createDrawerNavigator(
+    {
+        "Logowanie":{
+            screen: AuthStack
+        },
+        "Profil":{
+            screen: PrivateStack
+        },
+        "Ranking":{
+            screen: TempStack
+        },
+        "Dodaj wydarzenie":{
+            screen: TempStack
+        },
+        "Twoje wydarzenia":{
+            screen: MyEventsStack
+        }
+    },
+    {
+    }
+);
+
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(
@@ -21,12 +50,13 @@ const AppContainer = createAppContainer(
       PrivateStack,
       AuthStack,
       RegisterStack,
-      DrawerOpen
+        HomeScreenRouter,
+        MyEventsStack
     },
     {
       initialRouteName: "AuthStack"
     }
-  )
+  ),
 );
 
 export default function App() {

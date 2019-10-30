@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
-import {Container, Content, Form, Button, Text, Toast, Header, Left, Icon, Title, Body} from "native-base";
+import {Container, Content, Form, Button, Text, Toast, Header, Left, Icon, Title, Body, Right} from "native-base";
 import { Formik } from 'formik'
 import Input from '../components/input'
 import * as Yup from 'yup'
 import api from "../utils/api";
+import {DrawerActions} from "react-navigation-drawer";
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Fill username'),
+  username: Yup.string().required('Fill usedrname'),
   password: Yup.string().required('Fill password')
 })
 
@@ -48,7 +49,7 @@ export const Login = ({ navigation }: Props) => {
         <Left>
           <Button
               transparent
-              onPress={() => navigation.navigate("DrawerOpen")}
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           >
             <Icon name="menu" />
           </Button>

@@ -16,6 +16,7 @@ import {View} from "react-native";
 import api from "../utils/api";
 import {UserInfoPayload} from "../typings";
 import {ApiResponse} from "apisauce";
+import {DrawerActions} from "react-navigation-drawer";
 
 type Props = {
     navigation: NavigationStackProp;
@@ -34,13 +35,18 @@ export const HomeScreen = ({navigation}: Props) => {
         });
     }, []);
 
+    const logout = () => {
+        navigation.navigate("AuthStack");
+        api.logout();
+    };
+
     return (
         <Container>
             <Header>
                 <Left>
                     <Button
                         transparent
-                        onPress={() => navigation.navigate("DrawerOpen")}
+                        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
                     >
                         <Icon name="menu"/>
                     </Button>
@@ -48,6 +54,11 @@ export const HomeScreen = ({navigation}: Props) => {
                 <Body>
                     <Title>Profil użytkownika</Title>
                 </Body>
+                <Right>
+                    <Button onPress={logout} hasText transparent>
+                        <Text>Wyloguj się</Text>
+                    </Button>
+                </Right>
             </Header>
             <Content
                 contentContainerStyle={{

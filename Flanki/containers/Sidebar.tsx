@@ -18,10 +18,10 @@ export const SideBar = ({navigation}: Props) => {
 
     return (
         <Container>
-            <Content>
+            <Content contentContainerStyle={{ justifyContent: "center", flex: 1, padding: 40 }}>
                 <Button
                     transparent
-                    onPress={() => navigation.navigate("closeDrawer")}>
+                    onPress={() => navigation.navigate("DrawerClose")}>
                     <Icon name="ios-undo"/>
                 </Button>
                 <List

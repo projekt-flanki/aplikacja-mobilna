@@ -19,6 +19,7 @@ import Input from "../components/input";
 import api from "../utils/api";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import dayjs from "dayjs";
 
 type Props = {
   navigation: NavigationStackProp;
@@ -27,29 +28,27 @@ const initialValues = {
   eventname: "",
   location: "",
   date: "",
-  description: ""
+  description: "",
+  hours: ""
 };
 const validationSchema = Yup.object().shape({
   eventname: Yup.string().required("Uzupełnij nazwę wydarzenia"),
-  location: Yup.string().required("Uzupełnij lokalizacje"),
-  date: Yup.string().required("Uzupełnij datę")
+  location: Yup.string().required("Uzupełnij lokalizacje")
+  // date: Yup.string().required("Uzupełnij datę")
 });
 const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 export const AddEvent = ({ navigation }: Props) => {
   const goToMenu = () => {
     navigation.navigate("AuthStack");
   };
-  const handleSubmit = ({
-    eventname,
-    location,
-    date,
-    description
-  }) => {
+
+  const handleSubmit = ({ eventname, location, date, description }) => {
+    console.log("cd");
     api
       .addEvent({
         name: eventname,
         location: location,
-        date: date,
+        date: dayjs().toISOString(),
         description: description
       })
       .then(({ ok, data }) => {
@@ -70,7 +69,6 @@ export const AddEvent = ({ navigation }: Props) => {
         }
       });
   };
-  
 
   return (
     <Container>
@@ -82,30 +80,30 @@ export const AddEvent = ({ navigation }: Props) => {
           <Title>Stwórz wydarzenie</Title>
         </Body>
       </Header>
-      <Form>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          {({
-            values: { eventname, description, location, date },
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting
-          }) => {
-            return (
-              <>
-                <Content
-                  contentContainerStyle={{
-                    justifyContent: "center",
-                    flex: 1,
-                    padding: 20
-                  }}
-                >
+      <Content
+        contentContainerStyle={{
+          justifyContent: "center",
+          flex: 1,
+          padding: 20
+        }}
+      >
+        <Form>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            {({
+              values: { eventname, description, location, date },
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting
+            }) => {
+              return (
+                <>
                   <Input
                     value={eventname}
                     label="Nazwa wydarzenia"
@@ -127,74 +125,46 @@ export const AddEvent = ({ navigation }: Props) => {
                     error={touched.description && (errors.description as string)}
                     onBlur={handleBlur("description")}
                   />
-                  <Input
-                    value={date}
+                  {/* <Input
+                    value={hours}
                     label="Wybierz godzinę"
-                    onChange={handleChange("date")}
-                    error="Poprawny format 20:45"
-                    onBlur={handleBlur("date")}
+                    onChange={handleChange("hours")}
+                    error=""
+                    onBlur={handleBlur("hours")}
+                  /> */}
+                  <Icon name="calendar" />
+                  <Text> Wybierz datę</Text>
+                  <DatePicker
+                    defaultDate={new Date()}
+                    minimumDate={new Date()}
+                    maximumDate={new Date(2021, 12, 31)}
+                    locale={"pl"}
+                    timeZoneOffsetInMinutes={undefined}
+                    modalTransparent={false}
+                    animationType={"fade"}
+                    androidMode={"spinner"}
+                    placeHolderText={date.length > 0 ? date : "  /  /  "}
+                    textStyle={{ color: "#040404" }}
+                    placeHolderTextStyle={{
+                      color: "#EFF0F3",
+                      borderBottomColor: "#B4BEC5",
+                      backgroundColor: "#B4BEC5"
+                    }}
+                    onDateChange={handleChange("date")}
+                    disabled={false}
                   />
-
-                  <View
-                    style={{
-                      flex: 0,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 10
-                    }}
-                  >
-                    <Icon name="calendar" />
-                    <Text> Wybierz datę</Text>
-                    <Text> </Text>
-                    <DatePicker
-                      defaultDate={new Date(2019, 4, 4)}
-                      minimumDate={new Date(2019, 1, 1)}
-                      maximumDate={new Date(2019, 12, 31)}
-                      locale={"pl"}
-                      timeZoneOffsetInMinutes={undefined}
-                      modalTransparent={false}
-                      animationType={"fade"}
-                      androidMode={"spinner"}
-                      placeHolderText="  /  /  "
-                      textStyle={{ color: "#040404" }}
-                      placeHolderTextStyle={{
-                        color: "#EFF0F3",
-                        borderBottomColor: "#B4BEC5",
-                        backgroundColor: "#B4BEC5"
-                      }}
-                      onDateChange={date}
-                      disabled={false}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 0,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 10
-                    }}
-                  >
-                    <Icon name="paperclip" />
-                    <Text> Wybierz zdjęcie do wydarzenia</Text>
-                    <Text> </Text>
-                    <Thumbnail small source={{ uri }} />
-                  </View>
-
-                  <Button
-                    onPress={handleSubmit}
-                    full
-                    light
-                    style={{ marginTop: 10 }}
-                  >
+                  {/* <Icon name="paperclip" />
+                  <Text> Wybierz zdjęcie do wydarzenia</Text>
+                  <Thumbnail small source={{ uri }} /> */}
+                  <Button onPress={handleSubmit} full style={{ marginTop: 10 }}>
                     <Text>Utwórz wydarzenie</Text>
                   </Button>
-                  
-                </Content>
-              </>
-            );
-          }}
-        </Formik>
-      </Form>
+                </>
+              );
+            }}
+          </Formik>
+        </Form>
+      </Content>
     </Container>
   );
 };

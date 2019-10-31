@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "apisauce": "^1.1.1",
+    "dayjs": "^1.8.16",
     "expo": "^35.0.0",
     "formik": "^1.5.8",
     "native-base": "^2.13.8",

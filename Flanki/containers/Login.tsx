@@ -1,31 +1,17 @@
 import React, { useState } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
-import {
-  Container,
-  Content,
-  Form,
-  Button,
-  Text,
-  Toast,
-  Header,
-  Left,
-  Icon,
-  Title,
-  Body,
-  Right
-} from "native-base";
+import { Container, Content, Form, Button, Text, Toast } from "native-base";
 import { Formik } from "formik";
 import Input from "../components/input";
 import * as Yup from "yup";
 import api from "../utils/api";
-import { DrawerActions } from "react-navigation-drawer";
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required("Fill usedrname"),
+  username: Yup.string().required("Fill username"),
   password: Yup.string().required("Fill password")
 });
 
@@ -60,16 +46,6 @@ export const Login = ({ navigation }: Props) => {
 
   return (
     <Container>
-      <Header>
-        <Left>
-          <Button transparent onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-            <Icon name="menu" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Zaloguj się</Title>
-        </Body>
-      </Header>
       <Content contentContainerStyle={{ justifyContent: "center", flex: 1, padding: 20 }}>
         <Form>
           <Formik
@@ -90,7 +66,7 @@ export const Login = ({ navigation }: Props) => {
                 <>
                   <Input
                     value={username}
-                    label="Username"
+                    label="Email"
                     onChange={handleChange("username")}
                     error={touched.username && (errors.username as string)}
                     onBlur={handleBlur("username")}
@@ -121,7 +97,7 @@ export const Login = ({ navigation }: Props) => {
 };
 
 Login.navigationOptions = {
-  header: null
+  title: "Login"
 };
 
 export default Login;

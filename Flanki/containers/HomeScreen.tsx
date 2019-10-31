@@ -64,11 +64,6 @@ export const HomeScreen = ({ navigation }: Props) => {
         <Body>
           <Title>Profil użytkownika</Title>
         </Body>
-        <Right>
-          <Button onPress={logout} hasText transparent>
-            <Text>Wyloguj się</Text>
-          </Button>
-        </Right>
       </Header>
       <Content
         contentContainerStyle={{

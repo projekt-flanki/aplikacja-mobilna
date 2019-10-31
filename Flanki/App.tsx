@@ -24,9 +24,6 @@ const AddEventStack = createStackNavigator({ AddEvent });
 
 const HomeScreenRouter = createDrawerNavigator(
   {
-    Logowanie: {
-      screen: AuthStack
-    },
     Profil: {
       screen: PrivateStack
     },
@@ -38,6 +35,9 @@ const HomeScreenRouter = createDrawerNavigator(
     },
     "Twoje wydarzenia": {
       screen: MyEventsStack
+    },
+    Wyloguj: {
+      screen: AuthStack
     }
   },
   {}

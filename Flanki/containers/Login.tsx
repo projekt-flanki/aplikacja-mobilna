@@ -52,6 +52,9 @@ export const Login = ({ navigation }: Props) => {
         }
       });
   };
+  const moveToAddEvent = () => {
+    navigation.navigate("AddEvent");
+  };
 
   const moveToRegister = () => navigation.navigate("RegisterStack");
 

@@ -7,10 +7,11 @@ import Login from "./containers/Login";
 import Register from "./containers/Register";
 import HomeScreen from "./containers/HomeScreen";
 import MyEvents from "./containers/MyEvents";
+import AddEvent from "./containers/AddEvent";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import SideBar from "./containers/Sidebar";
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createDrawerNavigator } from "react-navigation-drawer";
 import TempPage from "./containers/TempPage";
 
 const AuthStack = createStackNavigator({ Login });
@@ -19,30 +20,28 @@ const RegisterStack = createStackNavigator({ Register });
 // const DrawerOpen = createStackNavigator( {SideBar});
 const MyEventsStack = createStackNavigator({ MyEvents });
 const TempStack = createStackNavigator({ TempPage });
-
+const AddEventStack = createStackNavigator({ AddEvent });
 
 const HomeScreenRouter = createDrawerNavigator(
-    {
-        "Logowanie":{
-            screen: AuthStack
-        },
-        "Profil":{
-            screen: PrivateStack
-        },
-        "Ranking":{
-            screen: TempStack
-        },
-        "Dodaj wydarzenie":{
-            screen: TempStack
-        },
-        "Twoje wydarzenia":{
-            screen: MyEventsStack
-        }
+  {
+    Logowanie: {
+      screen: AuthStack
     },
-    {
+    Profil: {
+      screen: PrivateStack
+    },
+    Ranking: {
+      screen: TempStack
+    },
+    "Dodaj wydarzenie": {
+      screen: AddEventStack
+    },
+    "Twoje wydarzenia": {
+      screen: MyEventsStack
     }
+  },
+  {}
 );
-
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(
@@ -50,13 +49,14 @@ const AppContainer = createAppContainer(
       PrivateStack,
       AuthStack,
       RegisterStack,
-        HomeScreenRouter,
-        MyEventsStack
+      HomeScreenRouter,
+      MyEventsStack,
+      AddEventStack
     },
     {
       initialRouteName: "AuthStack"
     }
-  ),
+  )
 );
 
 export default function App() {

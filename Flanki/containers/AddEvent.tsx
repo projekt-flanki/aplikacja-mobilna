@@ -48,7 +48,7 @@ export const AddEvent = ({ navigation }: Props) => {
       .addEvent({
         name: eventname,
         location: location,
-        date: dayjs().toISOString(),
+        date: date,
         description: description
       })
       .then(({ ok, data }) => {

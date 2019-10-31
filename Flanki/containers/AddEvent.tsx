@@ -11,15 +11,16 @@ import {
   DatePicker,
   Button,
   Toast,
-  Form
+  Form,
+  Icon
 } from "native-base";
 import { View, Text } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
 import Input from "../components/input";
 import api from "../utils/api";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import dayjs from "dayjs";
+import { DrawerActions } from "react-navigation-drawer";
 
 type Props = {
   navigation: NavigationStackProp;
@@ -43,7 +44,6 @@ export const AddEvent = ({ navigation }: Props) => {
   };
 
   const handleSubmit = ({ eventname, location, date, description }) => {
-    console.log("cd");
     api
       .addEvent({
         name: eventname,
@@ -74,7 +74,9 @@ export const AddEvent = ({ navigation }: Props) => {
     <Container>
       <Header>
         <Left>
-          <Icon name="arrow-left" size={15} color="white" onPress={goToMenu} />
+          <Button transparent onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+            <Icon name="menu" />
+          </Button>
         </Left>
         <Body>
           <Title>Stwórz wydarzenie</Title>

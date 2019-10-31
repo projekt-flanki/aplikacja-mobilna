@@ -21,6 +21,7 @@ const create = () => {
   //protected
   const getUserInfo = () => api.get('user/info')
   const addEvent = (addEventPayload: NewEventPayload) => api.post(`event/create`,addEventPayload)
+  const getMyEvents = () => api.get('/event/all')
 
   const logout = () => delete api.headers['Authorization']
 
@@ -30,7 +31,8 @@ const create = () => {
     register,
     addEvent,
     setAuthorizationHeader,
-    getUserInfo
+    getUserInfo,
+    getMyEvents
   }
 }
 

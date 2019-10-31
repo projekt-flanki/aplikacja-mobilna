@@ -26,7 +26,7 @@ const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 const starUri =
   "https://cdn2.iconfinder.com/data/icons/modifiers-add-on-1-flat/48/Mod_Add-On_1-35-512.png";
 
-export const HomeScreen = ({ navigation  }: Props) => {
+export const HomeScreen = ({ navigation }: Props) => {
   const [userName, setUserName] = useState("");
   useEffect(() => {
     api.getUserInfo().then(({ data }: ApiResponse<UserInfoPayload>) => {

@@ -1,31 +1,33 @@
 import React, { useState } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
 import { Container, Content, Form, Button, Text, Toast } from "native-base";
-import Input from '../components/input'
+import Input from "../components/input";
 import api from "../utils/api";
-import * as Yup from 'yup'
+import * as Yup from "yup";
 import { Formik } from "formik";
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
-const initialValues = { email: '', username: '', password: '' }
+const initialValues = { email: "", username: "", password: "" };
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Fill username'),
-  password: Yup.string().required('Fill password'),
-  email: Yup.string().email("Expected email").required("Fill email")
-})
+  username: Yup.string().required("Fill username"),
+  password: Yup.string().required("Fill password"),
+  email: Yup.string()
+    .email("Expected email")
+    .required("Fill email")
+});
 
 export const Register = ({ navigation }: Props) => {
-
   const handleSubmit = ({ username, password, email }) => {
     api
       .register({
         name: username,
         password: password,
-        email
+        email,
+        profileImageBase64: ""
       })
       .then(({ ok, data }) => {
         if (ok) {
@@ -52,7 +54,11 @@ export const Register = ({ navigation }: Props) => {
     <Container>
       <Content contentContainerStyle={{ justifyContent: "center", flex: 1, padding: 20 }}>
         <Form>
-          <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
             {({
               values: { username, password, email },
               errors,
@@ -62,34 +68,36 @@ export const Register = ({ navigation }: Props) => {
               handleBlur,
               isSubmitting
             }) => {
-              return <>
-                <Input
-                  value={username}
-                  label="Username"
-                  onChange={handleChange('username')}
-                  error={touched.username && (errors.username as string)}
-                  onBlur={handleBlur('username')}
-                />
-                <Input
-                  value={email}
-                  label="Email"
-                  onChange={handleChange('email')}
-                  error={touched.email && (errors.email as string)}
-                  onBlur={handleBlur('email')}
-                />
-                <Input
-                  value={password}
-                  isSecure
-                  label="Password"
-                  onChange={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  error={touched.password && (errors.password as string)}
-                />
+              return (
+                <>
+                  <Input
+                    value={username}
+                    label="Username"
+                    onChange={handleChange("username")}
+                    error={touched.username && (errors.username as string)}
+                    onBlur={handleBlur("username")}
+                  />
+                  <Input
+                    value={email}
+                    label="Email"
+                    onChange={handleChange("email")}
+                    error={touched.email && (errors.email as string)}
+                    onBlur={handleBlur("email")}
+                  />
+                  <Input
+                    value={password}
+                    isSecure
+                    label="Password"
+                    onChange={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    error={touched.password && (errors.password as string)}
+                  />
 
-                <Button onPress={handleSubmit} block style={{ marginTop: 10 }}>
-                  <Text>Register</Text>
-                </Button>
-              </>
+                  <Button onPress={handleSubmit} block style={{ marginTop: 10 }}>
+                    <Text>Register</Text>
+                  </Button>
+                </>
+              );
             }}
           </Formik>
 

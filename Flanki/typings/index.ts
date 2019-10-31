@@ -5,6 +5,7 @@ export interface LoginPayload {
 
 export interface RegisterPayload extends LoginPayload {
   name: string;
+  profileImageBase64: string;
 }
 
 export interface UserInfoPayload {

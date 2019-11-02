@@ -27,6 +27,7 @@ export const Register = ({navigation}: Props) => {
         name: username,
         password: password,
         email,
+        profileImageBase64: '',
       })
       .then(({ok, data}) => {
         if (ok) {

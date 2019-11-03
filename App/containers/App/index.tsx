@@ -9,6 +9,7 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import TempPage from '../TempPageScreen';
+import EditProfile from '../EditProfileScreen';
 
 const AuthStack = createStackNavigator({Login});
 const PrivateStack = createStackNavigator({HomeScreen});
@@ -17,6 +18,7 @@ const RegisterStack = createStackNavigator({Register});
 const MyEventsStack = createStackNavigator({MyEvents});
 const TempStack = createStackNavigator({TempPage});
 const AddEventStack = createStackNavigator({AddEvent});
+const EditProfileStack = createStackNavigator({EditProfile});
 
 const HomeScreenRouter = createDrawerNavigator(
   {
@@ -48,6 +50,7 @@ const AppContainer = createAppContainer(
       HomeScreenRouter,
       MyEventsStack,
       AddEventStack,
+      EditProfileStack,
     },
     {
       initialRouteName: 'AuthStack',

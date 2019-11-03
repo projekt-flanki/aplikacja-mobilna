@@ -98,6 +98,10 @@ export const HomeScreen = ({navigation}: Props) => {
             </View>
           </>
         )}
+        <Button transparent
+                onPress={() =>navigation.navigate('EditProfileStack')}
+                  >
+          <Text>Edytuj</Text></Button>
       </Content>
     </Container>
   );

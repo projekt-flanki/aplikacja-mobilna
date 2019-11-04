@@ -100,7 +100,7 @@ export const EditProfile = ({navigation}: Props) => {
                     disabled={false}
                     maxStars={5}
                     rating={starsCount}
-                    selectedStar={(rating) => onStarRatingPress(rating)}
+                    selectedStar={(rating: any) => onStarRatingPress(rating)}
                   />
                   <Button onPress={handleSubmit} full style={{marginTop: 10}}>
                     <Text>Zapisz</Text>

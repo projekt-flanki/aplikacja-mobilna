@@ -12,6 +12,8 @@ import {
   Icon,
   Left,
   Toast,
+  List,
+  ListItem,
 } from 'native-base';
 import {NavigationStackProp} from 'react-navigation-stack';
 import {View} from 'react-native';
@@ -19,6 +21,7 @@ import api from '../../utils/api';
 import {UserInfoPayload} from '../../typings';
 import {ApiResponse} from 'apisauce';
 import {DrawerActions} from 'react-navigation-drawer';
+import * as events from 'events';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -34,6 +37,20 @@ export const HomeScreen = ({navigation}: Props) => {
     username?: string;
     profileImageBase64?: string;
   }>({});
+
+  const [starsCount, setStarCount] = useState(2);
+
+  const starListArray = [];
+
+  for (let i = 0; i < starsCount; i++) {
+    starListArray.push(<Thumbnail small source={{uri: starUri}} />);
+  }
+
+  const logout = () => {
+    navigation.navigate('AuthStack');
+    api.logout();
+  };
+
   useEffect(() => {
     api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
       if (ok) {
@@ -48,12 +65,7 @@ export const HomeScreen = ({navigation}: Props) => {
         logout();
       }
     });
-  }, []);
-
-  const logout = () => {
-    navigation.navigate('AuthStack');
-    api.logout();
-  };
+  }, [logout]);
 
   return (
     <Container>
@@ -90,18 +102,15 @@ export const HomeScreen = ({navigation}: Props) => {
                 alignItems: 'center',
               }}>
               <Text>Opinia: </Text>
-              <Thumbnail small source={{uri: starUri}} />
-              <Thumbnail small source={{uri: starUri}} />
-              <Thumbnail small source={{uri: starUri}} />
-              <Thumbnail small source={{uri: starUri}} />
-              <Thumbnail small source={{uri: starUri}} />
+              <View style={{flexDirection: 'row'}}>{starListArray}</View>
             </View>
           </>
         )}
-        <Button transparent
-                onPress={() =>navigation.navigate('EditProfileStack')}
-                  >
-          <Text>Edytuj</Text></Button>
+        <Button
+          transparent
+          onPress={() => navigation.navigate('EditProfileStack')}>
+          <Text>Edytuj</Text>
+        </Button>
       </Content>
     </Container>
   );

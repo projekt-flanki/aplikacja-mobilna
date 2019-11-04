@@ -1,13 +1,30 @@
 import React, {useState} from 'react';
 import {NavigationStackProp} from 'react-navigation-stack';
-import {Container, Content, Form, Button, Text, Toast} from 'native-base';
+import {
+  Container,
+  Content,
+  Form,
+  Button,
+  Text,
+  Toast,
+  Thumbnail,
+} from 'native-base';
 import Input from '../../components/input';
 import api from '../../utils/api';
 import * as Yup from 'yup';
+import ImagePicker from 'react-native-image-picker';
 import {Formik} from 'formik';
 
 type Props = {
   navigation: NavigationStackProp;
+};
+
+const options = {
+  title: 'Select Avatar',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
 };
 
 const initialValues = {email: '', username: '', password: ''};
@@ -21,13 +38,14 @@ const validationSchema = Yup.object().shape({
 });
 
 export const Register = ({navigation}: Props) => {
+  const [image, setImage] = useState('');
   const handleSubmit = ({username, password, email}: typeof initialValues) => {
     api
       .register({
         name: username,
         password: password,
         email,
-        profileImageBase64: '',
+        profileImageBase64: image,
       })
       .then(({ok, data}) => {
         if (ok) {
@@ -43,12 +61,36 @@ export const Register = ({navigation}: Props) => {
             //@ts-ignore
             text: data.message || 'Server error try again',
             buttonText: 'Ok',
+            duration: 12312312312321,
           });
         }
+      })
+      .catch(e => {
+        console.log(e);
       });
   };
 
   const moveToLogin = () => navigation.navigate('AuthStack');
+
+  const addAvatar = () => {
+    ImagePicker.showImagePicker(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        // const source = {uri: response.uri};
+
+        // You can also display the image using data:
+        const source = 'data:image/jpeg;base64,' + response.data;
+        setImage(source);
+      }
+    });
+  };
 
   return (
     <Container>
@@ -70,10 +112,19 @@ export const Register = ({navigation}: Props) => {
               handleSubmit,
               handleChange,
               handleBlur,
-              isSubmitting,
             }) => {
               return (
                 <>
+                  {image.length > 0 && (
+                    <>
+                      <Text style={{alignSelf: 'center'}}>Avatar</Text>
+                      <Thumbnail
+                        large
+                        source={{uri: image}}
+                        style={{alignSelf: 'center'}}
+                      />
+                    </>
+                  )}
                   <Input
                     value={username}
                     label="Username"
@@ -107,6 +158,9 @@ export const Register = ({navigation}: Props) => {
 
           <Button onPress={moveToLogin} block style={{marginTop: 10}}>
             <Text>Already have an account?</Text>
+          </Button>
+          <Button style={{marginTop: 10}} block onPress={addAvatar}>
+            <Text>Pick an avatar</Text>
           </Button>
         </Form>
       </Content>

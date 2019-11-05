@@ -56,11 +56,19 @@ const MyEvents = ({navigation}: Props) => {
                   // button
                   // onPress={() => navigation.navigate(data.route)}
                 >
+                  <Left>
                   <Text>{dayjs(data.date).format('DD MM YYYY')}</Text>
                   <Text style={{fontWeight: 'bold', marginLeft: 5}}>
                     {data.name}
                   </Text>
-                  <Text style={{marginLeft: 5}}>{data.location}</Text>
+                  <Text style={{ marginLeft: 5 }}>{data.location}</Text>
+                  </Left>
+                  <Right>
+                    <Button style={{ backgroundColor: "white"}}>
+                      <Icon active name="settings" style={{ fontSize: 20, color: 'gray' }} />
+                      <Text>Edytuj</Text>
+              </Button>
+              </Right>
                 </ListItem>
               );
             }}

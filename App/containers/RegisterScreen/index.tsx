@@ -8,26 +8,21 @@ import {
   Text,
   Toast,
   Thumbnail,
+  View,
 } from 'native-base';
 import Input from '../../components/input';
 import api from '../../utils/api';
 import * as Yup from 'yup';
-import ImagePicker from 'react-native-image-picker';
 import {Formik} from 'formik';
+import ImageHandler from '../../components/imageHandler';
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
-const options = {
-  title: 'Select Avatar',
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
-
 const initialValues = {email: '', username: '', password: ''};
+
+const uri = 'https://facebook.github.io/react-native/docs/assets/favicon.png';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Fill username'),
@@ -72,26 +67,6 @@ export const Register = ({navigation}: Props) => {
 
   const moveToLogin = () => navigation.navigate('AuthStack');
 
-  const addAvatar = () => {
-    ImagePicker.showImagePicker(options, response => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        // const source = {uri: response.uri};
-
-        // You can also display the image using data:
-        const source = 'data:image/jpeg;base64,' + response.data;
-        setImage(source);
-      }
-    });
-  };
-
   return (
     <Container>
       <Content
@@ -115,16 +90,11 @@ export const Register = ({navigation}: Props) => {
             }) => {
               return (
                 <>
-                  {image.length > 0 && (
-                    <>
-                      <Text style={{alignSelf: 'center'}}>Avatar</Text>
-                      <Thumbnail
-                        large
-                        source={{uri: image}}
-                        style={{alignSelf: 'center'}}
-                      />
-                    </>
-                  )}
+                  <ImageHandler
+                    image={image || uri}
+                    setImage={setImage}
+                    label="Pick avatar"
+                  />
                   <Input
                     value={username}
                     label="Username"
@@ -158,9 +128,6 @@ export const Register = ({navigation}: Props) => {
 
           <Button onPress={moveToLogin} block style={{marginTop: 10}}>
             <Text>Already have an account?</Text>
-          </Button>
-          <Button style={{marginTop: 10}} block onPress={addAvatar}>
-            <Text>Pick an avatar</Text>
           </Button>
         </Form>
       </Content>

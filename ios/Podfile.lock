@@ -19,6 +19,27 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - Google-Maps-iOS-Utils (2.1.0):
+    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
+    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Clustering (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Geometry (2.1.0):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
+    - GoogleMaps
+  - GoogleMaps (3.2.0):
+    - GoogleMaps/Maps (= 3.2.0)
+  - GoogleMaps/Base (3.2.0)
+  - GoogleMaps/Maps (3.2.0):
+    - GoogleMaps/Base
   - RCTRequired (0.61.3)
   - RCTTypeSafety (0.61.3):
     - FBLazyVector (= 0.61.3)
@@ -182,7 +203,13 @@ PODS:
     - React-cxxreact (= 0.61.3)
     - React-jsi (= 0.61.3)
   - React-jsinspector (0.61.3)
+  - react-native-google-maps (0.26.1):
+    - Google-Maps-iOS-Utils (= 2.1.0)
+    - GoogleMaps (= 3.2.0)
+    - React
   - react-native-image-picker (1.1.0):
+    - React
+  - react-native-maps (0.26.1):
     - React
   - React-RCTActionSheet (0.61.3):
     - React-Core/RCTActionSheetHeaders (= 0.61.3)
@@ -231,6 +258,8 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Google-Maps-iOS-Utils
+  - GoogleMaps
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -242,7 +271,9 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -261,6 +292,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - Google-Maps-iOS-Utils
+    - GoogleMaps
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -291,8 +324,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-google-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -327,6 +364,8 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: f7be9bcc5ce259f7c39509f3f4caf59020d11d4c
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
+  GoogleMaps: 5046d7edfe381c1a0b20fdaf293915a375c3122b
   RCTRequired: a72523286ea3381f97b28d87529c265baad3ad7d
   RCTTypeSafety: e3cc0537400222250f0be37bd69f4b339d3c0a0f
   React: 3dc877fc32548b0c7108ca7f301466f4956cbff8
@@ -336,7 +375,9 @@ SPEC CHECKSUMS:
   React-jsi: 8bcf5836caa8a759c135ab9ef97f3e023a7b94af
   React-jsiexecutor: ae078e9df9c65bcdcf68f9a17656657932d95528
   React-jsinspector: a8939cc6909607eb5e8a5ecfff7c6226984e174d
+  react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
+  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
   React-RCTActionSheet: 94671eef55b01a93be735605822ef712d5ea208e
   React-RCTAnimation: 524ae33e73de9c0fe6501a7a4bda8e01d26499d9
   React-RCTBlob: 5481c2db702f57207af7e7a9b32d90524b821b72
@@ -351,6 +392,6 @@ SPEC CHECKSUMS:
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
   Yoga: 02036f6383c0008edb7ef0773a0e6beb6ce82bd1
 
-PODFILE CHECKSUM: 3c2a8cf0d0931ffed6f43dc650d8822fa3b2c05c
+PODFILE CHECKSUM: 6115ec99d883a714e1d3bd5ddfc626016a3b6216
 
 COCOAPODS: 1.8.4

@@ -20,3 +20,10 @@ export interface NewEventPayload{
   date: string;
   description: string;
 }
+
+export interface EditEventPayload{
+  name: string;
+  location: string;
+  date: string;
+  description: string;
+}

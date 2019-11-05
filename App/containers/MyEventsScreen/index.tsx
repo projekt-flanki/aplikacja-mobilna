@@ -22,7 +22,10 @@ import {ApiResponse} from 'apisauce';
 type Props = {
   navigation: NavigationStackProp;
 };
-const MyEvents = ({navigation}: Props) => {
+const MyEvents = ({ navigation }: Props) => {
+  const goToEvents = () => {
+    navigation.navigate("EditEventStack");
+}
   const [events, setMyEvents] = useState([]);
 
   useEffect(() => {
@@ -64,7 +67,7 @@ const MyEvents = ({navigation}: Props) => {
                   <Text style={{ marginLeft: 5 }}>{data.location}</Text>
                   </Left>
                   <Right>
-                    <Button style={{ backgroundColor: "white"}}>
+                    <Button style={{ backgroundColor: "white"}} onPress={goToEvents}>
                       <Icon active name="settings" style={{ fontSize: 20, color: 'gray' }} />
                       <Text>Edytuj</Text>
               </Button>

@@ -36,9 +36,10 @@ export const HomeScreen = ({navigation}: Props) => {
   const [user, setUser] = useState<{
     username?: string;
     profileImageBase64?: string;
+    rating?: number;
   }>({});
 
-  const [starsCount, setStarCount] = useState(2);
+  const [starsCount, setStarCount] = useState();
 
   const starListArray = [];
 
@@ -55,6 +56,7 @@ export const HomeScreen = ({navigation}: Props) => {
     api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
       if (ok) {
         setUser(data);
+        setStarCount(data.rating);
       } else {
         Toast.show({
           type: 'danger',

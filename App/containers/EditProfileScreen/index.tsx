@@ -21,30 +21,40 @@ import {DrawerActions} from 'react-navigation-drawer';
 import api from "../../utils/api";
 import {ApiResponse} from "apisauce";
 import {UserInfoPayload} from "../../typings";
+import ImageHandler from "../../components/imageHandler";
 
 type Props = {
   navigation: NavigationStackProp;
 };
-const initialValues = {
-  username: '',
-  points: '',
-};
+
+const uri = 'https://facebook.github.io/react-native/docs/assets/favicon.png';
 
 export const EditProfile = ({navigation}: Props) => {
-  const handleSubmit = (): void => {};
   const [starsCount, setStarCount] = useState(2);
+  const [image, setImage] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
 
   const onStarRatingPress = (rating: any) => {
     setStarCount(rating);
   };
 
-  const [userName, setUserName] = useState('');
+  const initialValues = {
+    email: email,
+    username: userName,
+    profileImageBase64: image,
+    rating: starsCount
+  };
+
   useEffect(() => {
     api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
       if (ok) {
-        const {username, profileImageBase64} = data as UserInfoPayload;
+        const {username, profileImageBase64, rating, email} = data as UserInfoPayload;
         console.log(profileImageBase64);
         setUserName(username);
+        setImage(profileImageBase64);
+        setStarCount(rating);
+        setEmail(email);
       } else {
         Toast.show({
           type: 'danger',
@@ -55,6 +65,30 @@ export const EditProfile = ({navigation}: Props) => {
       }
     });
   }, []);
+
+  const handleSubmit = ({email, username, profileImageBase64, rating}: typeof initialValues): void => {
+    api
+        .editUser({
+          email: email, username: username, profileImageBase64: profileImageBase64, rating: rating
+        })
+        .then(({ok, data}) => {
+          if (ok) {
+            Toast.show({
+              type: 'success',
+              text: 'Edytowano użytkownika',
+              buttonText: 'Ok',
+            });
+            navigation.navigate('HomeScreenRouter');
+          } else {
+            Toast.show({
+              type: 'danger',
+              //@ts-ignore
+              text: data.message || 'Server error try again',
+              buttonText: 'Ok',
+            });
+          }
+        });
+  };
 
   return (
     <Container>
@@ -77,9 +111,9 @@ export const EditProfile = ({navigation}: Props) => {
           padding: 20,
         }}>
         <Form>
-          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+          <Formik enableReinitialize initialValues={initialValues} onSubmit={handleSubmit}>
             {({
-              values: {username, points, stars},
+              values: {username},
               errors,
               touched,
               handleSubmit,
@@ -89,6 +123,11 @@ export const EditProfile = ({navigation}: Props) => {
             }) => {
               return (
                 <>
+                  <ImageHandler
+                      image={image || uri}
+                      setImage={setImage}
+                      label="Edytuj avatar"
+                  />
                   <Input
                     value={username}
                     label="Nazwa użytkownika"

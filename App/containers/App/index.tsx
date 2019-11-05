@@ -53,7 +53,7 @@ const AppContainer = createAppContainer(
       AuthStack,
       RegisterStack,
       HomeScreenRouter,
-      MyEventsStack: AllEventsStack,
+      AllEventsStack,
       AddEventStack,
       EditProfileStack,
     },

@@ -109,7 +109,7 @@ export const AddEvent = ({navigation}: Props) => {
             left: 0,
             right: 0,
             bottom: 0,
-            ...(!showMap && {display: 'none', zIndex: -1}),
+            ...(!showMap && {height: 0, width: 0, opacity: 0, zIndex: -1}),
           }}
           showsUserLocation
           provider={PROVIDER_GOOGLE}
@@ -133,17 +133,18 @@ export const AddEvent = ({navigation}: Props) => {
             title={'test'}
             description={'test'}
           />
-          <Button
-            onPress={() => setShowMap(false)}
-            dark
-            style={{
-              position: 'absolute',
-              top: 10,
-              left: 10,
-            }}>
-            <Text>Accept</Text>
-          </Button>
         </MapView>
+        <Button
+          onPress={() => setShowMap(false)}
+          dark
+          style={{
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            ...(!showMap && {height: 0, width: 0, opacity: 0}),
+          }}>
+          <Text>Accept</Text>
+        </Button>
         <Form>
           <Formik
             initialValues={initialValues}
@@ -162,7 +163,7 @@ export const AddEvent = ({navigation}: Props) => {
                 wasMapOpened && (errors.location as string),
               );
               return (
-                <View style={showMap ? {display: 'none'} : {}}>
+                <View style={showMap ? {height: 0, width: 0, opacity: 0} : {}}>
                   <Input
                     value={eventname}
                     label="Nazwa wydarzenia"

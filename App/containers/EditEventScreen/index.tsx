@@ -22,11 +22,13 @@ type Props = {
 
   
 export const EditEvent = ({ navigation }: Props) => {
-  
+
+    // console.log(navigation.state);
     return (
+        
         <Container>
             <Text>
-                hej
+               xd
             </Text>
         </Container>);
 };

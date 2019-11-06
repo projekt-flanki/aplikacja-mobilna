@@ -23,9 +23,12 @@ type Props = {
   navigation: NavigationStackProp;
 };
 const MyEvents = ({ navigation }: Props) => {
-  const goToEvents = () => {
-    navigation.navigate("EditEventStack");
-}
+  const goToEvents = (id: string) => () => {
+   // console.log('wysylam id' + id);
+    navigation.navigate("EditEventStack"/*,{ itemId: 86,
+      otherParam: 'anything you want here'}*/);
+  }
+
   const [events, setMyEvents] = useState([]);
 
   useEffect(() => {
@@ -53,6 +56,7 @@ const MyEvents = ({ navigation }: Props) => {
           <List
             dataArray={events}
             renderRow={data => {
+              console.log(events);
               return (
                 <ListItem
                   key={data.id}
@@ -67,7 +71,7 @@ const MyEvents = ({ navigation }: Props) => {
                   <Text style={{ marginLeft: 5 }}>{data.location}</Text>
                   </Left>
                   <Right>
-                    <Button style={{ backgroundColor: "white"}} onPress={goToEvents}>
+                    <Button style={{ backgroundColor: "white"}} onPress={goToEvents(data.id)}>
                       <Icon active name="settings" style={{ fontSize: 20, color: 'gray' }} />
                       <Text>Edytuj</Text>
               </Button>

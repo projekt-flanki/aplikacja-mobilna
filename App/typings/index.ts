@@ -22,6 +22,7 @@ export interface NewEventPayload{
 }
 
 export interface EditEventPayload{
+  id: string
   name: string;
   location: string;
   date: string;

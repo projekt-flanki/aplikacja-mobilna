@@ -22,7 +22,7 @@ const create = () => {
   const getUserInfo = () => api.get('user/info')
   const addEvent = (addEventPayload: NewEventPayload) => api.post(`event/create`,addEventPayload)
   const getMyEvents = () => api.get('/event/owned')
-  // const editEvent = () => api.put('/event/edit')
+  const editEvent = () => api.put('/event/edit')
   const logout = () => delete api.headers['Authorization']
 
   return {
@@ -32,7 +32,8 @@ const create = () => {
     addEvent,
     setAuthorizationHeader,
     getUserInfo,
-    getMyEvents
+    getMyEvents,
+    editEvent
   }
 }
 

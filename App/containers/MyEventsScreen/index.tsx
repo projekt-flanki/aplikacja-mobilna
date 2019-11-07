@@ -24,9 +24,9 @@ type Props = {
 };
 const MyEvents = ({ navigation }: Props) => {
   const goToEvents = (id: string) => () => {
-   // console.log('wysylam id' + id);
-    navigation.navigate("EditEventStack"/*,{ itemId: 86,
-      otherParam: 'anything you want here'}*/);
+   console.log('wysylam id' + id);
+    navigation.navigate('EditEventStack');
+    navigation.push({ paramName: id });
   }
 
   const [events, setMyEvents] = useState([]);

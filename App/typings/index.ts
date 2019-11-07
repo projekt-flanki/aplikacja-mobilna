@@ -21,10 +21,6 @@ export interface NewEventPayload{
   description: string;
 }
 
-export interface EditEventPayload{
-  id: string
-  name: string;
-  location: string;
-  date: string;
-  description: string;
+export interface EditEventPayload extends NewEventPayload{
+  id: string;
 }

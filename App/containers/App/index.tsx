@@ -4,21 +4,21 @@ import Login from '../LoginScreen';
 import Register from '../RegisterScreen';
 import HomeScreen from '../HomeScreen';
 import MyEvents from '../MyEventsScreen';
-import AddEvent from '../AddEventScreen';
-import EditEvent from '../EditEventScreen';
+import ManageEvents from '../ManageEvents';
+
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import TempPage from '../TempPageScreen';
-
+ 
 const AuthStack = createStackNavigator({Login});
 const PrivateStack = createStackNavigator({HomeScreen});
 const RegisterStack = createStackNavigator({Register});
 // const DrawerOpen = createStackNavigator( {SideBar});
 const MyEventsStack = createStackNavigator({MyEvents});
 const TempStack = createStackNavigator({TempPage});
-const AddEventStack = createStackNavigator({AddEvent});
-const EditEventStack = createStackNavigator({EditEvent});
+const ManageEventsStack = createStackNavigator({ManageEvents});
+
 
 const HomeScreenRouter = createDrawerNavigator(
   {
@@ -29,7 +29,7 @@ const HomeScreenRouter = createDrawerNavigator(
       screen: TempStack,
     },
     'Dodaj wydarzenie': {
-      screen: AddEventStack,
+      screen: ManageEventsStack,
     },
     'Twoje wydarzenia': {
       screen: MyEventsStack,
@@ -49,8 +49,7 @@ const AppContainer = createAppContainer(
       RegisterStack,
       HomeScreenRouter,
       MyEventsStack,
-      AddEventStack,
-      EditEventStack
+      ManageEventsStack
     },
     {
       initialRouteName: 'AuthStack',

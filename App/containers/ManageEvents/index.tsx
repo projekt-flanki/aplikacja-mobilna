@@ -37,7 +37,7 @@ const validationSchema = Yup.object().shape({
   // date: Yup.string().required("Uzupełnij datę")
 });
 const uri = 'https://facebook.github.io/react-native/docs/assets/favicon.png';
-export const AddEvent = ({navigation}: Props) => {
+export const ManageEvents = ({navigation}: Props) => {
   const handleSubmit = ({
     eventname,
     location,
@@ -56,7 +56,7 @@ export const AddEvent = ({navigation}: Props) => {
           Toast.show({
             type: 'success',
             text: 'Utworzono wydarzenie',
-            buttonText: 'Ok',
+            buttonText: 'Ok', 
           });
           navigation.navigate('PrivateStack');
         } else {
@@ -172,8 +172,8 @@ export const AddEvent = ({navigation}: Props) => {
     </Container>
   );
 };
-AddEvent.navigationOptions = {
+ManageEvents.navigationOptions = {
   header: null,
 };
 
-export default AddEvent;
+export default ManageEvents;

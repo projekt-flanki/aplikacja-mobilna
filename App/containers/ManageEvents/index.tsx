@@ -22,7 +22,6 @@ import {Formik, FormikBag} from 'formik';
 import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { EditEventPayload } from '../../typings'
 
 type Props = {
   navigation: NavigationStackProp;
@@ -62,21 +61,25 @@ const [eventname, setEventName] = useState('');
       setLocation(event.location);
       setId(event.id);
       setDate(event.date);
+      console.log(initialValues);
+      console.log(id);
     }
   });
    
   
   const handleEdit = (
-    {eventname, date,description}: typeof initialValues,id,latitude,longitude): void => {
+    { eventname, date, description }: typeof initialValues, id, latitude, longitude): void => {
+    console.log('handle event' +id + eventname + latitude + longitude + date + description);
     api
       .editEvent({
+        id,
         name: eventname,
         latitude,
         longitude,
         date,
         description,
-        id,
-      })
+  
+      })  
       .then(({ok, data}: ApiResponse<any>) => {
         if (ok) {
           Toast.show({
@@ -140,7 +143,7 @@ const [eventname, setEventName] = useState('');
           </Button>
         </Left>
         <Body>
-          <Title>Stwórz wydarzenie</Title>
+          <Title>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Title>
         </Body>
       </Header>
       <Content
@@ -199,7 +202,7 @@ const [eventname, setEventName] = useState('');
         <Form>
           <Formik
             initialValues={initialValues}
-            onSubmit={handleSubmit}
+            onSubmit={id? handleEdit: handleSubmit}
             validationSchema={validationSchema}>
             {({
               values: {eventname, description, date},
@@ -275,7 +278,7 @@ const [eventname, setEventName] = useState('');
                   <Text> Wybierz zdjęcie do wydarzenia</Text>
                   <Thumbnail small source={{ uri }} /> */}
                   <Button onPress={handleSubmit} full style={{marginTop: 10}}>
-                    <Text>Utwórz wydarzenie</Text>
+                    <Text>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
                   </Button>
                 </View>
               );

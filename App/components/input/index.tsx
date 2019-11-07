@@ -8,6 +8,8 @@ type Props = {
   onChange: any;
   isSecure?: boolean;
   onBlur: any;
+  onClick?: () => void;
+  disabled?: boolean;
 };
 
 export const Input = ({
@@ -15,14 +17,24 @@ export const Input = ({
   error,
   value,
   onChange,
-  isSecure = false,
   onBlur,
+  isSecure = false,
+  disabled = false,
+  onClick = () => {},
 }: Props) => {
   return (
     <>
-      <Item error={!!error} style={{marginTop: 10}} regular stackedLabel last>
+      <Item
+        onPress={onClick}
+        error={!!error}
+        style={{marginTop: 10}}
+        regular
+        stackedLabel
+        last>
         <Label>{label}</Label>
         <NativeInput
+          onTouchStart={onClick}
+          disabled={disabled}
           onBlur={onBlur}
           secureTextEntry={isSecure}
           value={value}

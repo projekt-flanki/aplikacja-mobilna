@@ -12,46 +12,55 @@ import {
   Toast,
   Form,
   Icon,
+  Text,
+  View,
 } from 'native-base';
-import {Text} from 'react-native';
 import Input from '../../components/input';
 import api from '../../utils/api';
 import * as Yup from 'yup';
-import {Formik} from 'formik';
+import {Formik, FormikBag} from 'formik';
 import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 type Props = {
   navigation: NavigationStackProp;
 };
 const initialValues = {
   eventname: '',
-  location: '',
   date: '',
+  location: '',
   description: '',
   hours: '',
 };
 const validationSchema = Yup.object().shape({
   eventname: Yup.string().required('Uzupełnij nazwę wydarzenia'),
-  location: Yup.string().required('Uzupełnij lokalizacje'),
   // date: Yup.string().required("Uzupełnij datę")
 });
-const uri = 'https://facebook.github.io/react-native/docs/assets/favicon.png';
+
 export const ManageEvents = ({navigation}: Props) => {
-  const handleSubmit = ({
-    eventname,
-    location,
-    date,
-    description,
-  }: typeof initialValues) => {
+  const [wasMapOpened, setMapOpened] = useState(false);
+  const [positionData, setPositionData] = useState({
+    latitude: 51.7833,
+    longitude: 19.4667,
+  });
+  const [showMap, setShowMap] = useState(false);
+  const handleSubmit = (
+    {eventname, date, description}: typeof initialValues,
+    {setFieldError}: any,
+  ) => {
+    if (!wasMapOpened) {
+      setFieldError('location', 'Wybierz lokacje');
+    }
     api
       .addEvent({
         name: eventname,
-        location: location,
+        latitude: positionData.latitude,
+        longitude: positionData.longitude,
         date: date,
         description: description,
       })
-      .then(({ok}: ApiResponse<any>) => {
+      .then(({ok, data}: ApiResponse<any>) => {
         if (ok) {
           Toast.show({
             type: 'success',
@@ -69,7 +78,6 @@ export const ManageEvents = ({navigation}: Props) => {
         }
       });
   };
-
   return (
     <Container>
       <Header>
@@ -86,26 +94,76 @@ export const ManageEvents = ({navigation}: Props) => {
       </Header>
       <Content
         contentContainerStyle={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           justifyContent: 'center',
-          flex: 1,
-          padding: 20,
+          alignItems: 'center',
         }}>
+        <MapView
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            ...(!showMap && { opacity: 0, zIndex: -1}),
+          }}
+          showsUserLocation
+          provider={PROVIDER_GOOGLE}
+          onRegionChange={({longitude, latitude}) => {
+            setPositionData({
+              longitude,
+              latitude,
+            });
+          }}
+          initialRegion={{
+            latitude: positionData.latitude,
+            longitude: positionData.longitude,
+            latitudeDelta: 0.0022,
+            longitudeDelta: 0.0021,
+          }}>
+          <Marker
+            coordinate={{
+              latitude: positionData.latitude,
+              longitude: positionData.longitude,
+            }}
+            title={'test'}
+            description={'test'}
+          />
+        </MapView>
+        <Button
+          onPress={() => setShowMap(false)}
+          dark
+          style={{
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            ...(!showMap && {height: 0, width: 0, opacity: 0}),
+          }}>
+          <Text>Accept</Text>
+        </Button>
         <Form>
           <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}>
             {({
-              values: {eventname, description, location, date},
+              values: {eventname, description, date},
               errors,
               touched,
               handleSubmit,
               handleChange,
               handleBlur,
-              isSubmitting,
             }) => {
+              console.log(
+                'opened',
+                wasMapOpened && (errors.location as string),
+              );
               return (
-                <>
+                <View style={showMap ? {height: 0, width: 0, opacity: 0} : {}}>
                   <Input
                     value={eventname}
                     label="Nazwa wydarzenia"
@@ -114,10 +172,21 @@ export const ManageEvents = ({navigation}: Props) => {
                     onBlur={handleBlur('eventname')}
                   />
                   <Input
-                    value={location}
+                    onClick={() => {
+                      setMapOpened(true);
+                      setShowMap(true);
+                    }}
+                    disabled
+                    value={
+                      !wasMapOpened
+                        ? ''
+                        : `${positionData.latitude.toFixed(
+                            4,
+                          )} ${positionData.longitude.toFixed(4)}`
+                    }
                     label="Lokalizacja wydarzenia"
                     onChange={handleChange('location')}
-                    error={touched.location && (errors.location as string)}
+                    error={!wasMapOpened && (errors.location as string)}
                     onBlur={handleBlur('location')}
                   />
                   <Input
@@ -129,13 +198,6 @@ export const ManageEvents = ({navigation}: Props) => {
                     }
                     onBlur={handleBlur('description')}
                   />
-                  {/* <Input
-                    value={hours}
-                    label="Wybierz godzinę"
-                    onChange={handleChange("hours")}
-                    error=""
-                    onBlur={handleBlur("hours")}
-                  /> */}
                   <Icon name="calendar" />
                   <Text> Wybierz datę</Text>
                   <DatePicker
@@ -163,7 +225,7 @@ export const ManageEvents = ({navigation}: Props) => {
                   <Button onPress={handleSubmit} full style={{marginTop: 10}}>
                     <Text>Utwórz wydarzenie</Text>
                   </Button>
-                </>
+                </View>
               );
             }}
           </Formik>

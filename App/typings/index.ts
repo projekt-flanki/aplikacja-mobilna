@@ -16,7 +16,8 @@ export interface UserInfoPayload {
 
 export interface NewEventPayload{
   name: string;
-  location: string;
+  latitude: number;
+  longitude: number;
   date: string;
   description: string;
 }

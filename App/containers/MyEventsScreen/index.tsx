@@ -18,15 +18,16 @@ import api from '../../utils/api';
 import {NavigationStackProp} from 'react-navigation-stack';
 import dayjs from 'dayjs';
 import {ApiResponse} from 'apisauce';
+import navigateWithParams from '../../utils/navigateWithParams';
 
 type Props = {
   navigation: NavigationStackProp;
 };
 const MyEvents = ({ navigation }: Props) => {
-  const goToEvents = (id: string) => () => {
-   console.log('wysylam id' + id);
-    navigation.navigate('EditEventStack');
-    navigation.push({ paramName: id });
+  const goToEvents = (data: object) => () => {
+    console.log('wysylam MAPLE NA KSIEZYC');
+    console.log( data);
+    navigateWithParams(navigation, 'ManageEventsStack', 'ManageEvents', {eventObject: data});
   }
 
   const [events, setMyEvents] = useState([]);
@@ -71,7 +72,7 @@ const MyEvents = ({ navigation }: Props) => {
                   <Text style={{ marginLeft: 5 }}>{data.location}</Text>
                   </Left>
                   <Right>
-                    <Button style={{ backgroundColor: "white"}} onPress={goToEvents(data.id)}>
+                    <Button style={{ backgroundColor: "white"}} onPress={goToEvents(data)}>
                       <Icon active name="settings" style={{ fontSize: 20, color: 'gray' }} />
                       <Text>Edytuj</Text>
               </Button>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {NavigationStackProp} from 'react-navigation-stack';
 import {
   Container,
@@ -21,30 +21,80 @@ import * as Yup from 'yup';
 import {Formik, FormikBag} from 'formik';
 import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { EditEventPayload } from '../../typings'
 
 type Props = {
   navigation: NavigationStackProp;
 };
-const initialValues = {
-  eventname: '',
-  date: '',
-  location: '',
-  description: '',
-  hours: '',
-};
+
 const validationSchema = Yup.object().shape({
   eventname: Yup.string().required('Uzupełnij nazwę wydarzenia'),
   // date: Yup.string().required("Uzupełnij datę")
 });
 
-export const ManageEvents = ({navigation}: Props) => {
+export const ManageEvents = ({ navigation }: Props) => {
+
+const [eventname, setEventName] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [id, setId] = useState('');   
+  const [showMap, setShowMap] = useState(false);
   const [wasMapOpened, setMapOpened] = useState(false);
   const [positionData, setPositionData] = useState({
     latitude: 51.7833,
     longitude: 19.4667,
   });
-  const [showMap, setShowMap] = useState(false);
+  
+  const initialValues = {
+      eventname,
+      date,
+      location,
+      description
+  };
+
+  useEffect(() => {
+    if (navigation.state.params != undefined) {
+      const event = navigation.state.params.eventObject;
+      setEventName(event.name);
+      setDescription(event.description);
+      setLocation(event.location);
+      setId(event.id);
+      setDate(event.date);
+    }
+  });
+   
+  
+  const handleEdit = (
+    {eventname, date,description}: typeof initialValues,id,latitude,longitude): void => {
+    api
+      .editEvent({
+        name: eventname,
+        latitude,
+        longitude,
+        date,
+        description,
+        id,
+      })
+      .then(({ok, data}: ApiResponse<any>) => {
+        if (ok) {
+          Toast.show({
+            type: 'success',
+            text: 'Edytowano wydarzenie',
+            buttonText: 'Ok', 
+          });
+          navigation.navigate('PrivateStack');
+        } else {
+          Toast.show({
+            type: 'danger',
+            //@ts-ignore
+            text: data.message || 'Nie udało się edytować wydarzenia',
+            buttonText: 'Ok',
+          });
+        }
+      });
+  };
   const handleSubmit = (
     {eventname, date, description}: typeof initialValues,
     {setFieldError}: any,
@@ -79,6 +129,7 @@ export const ManageEvents = ({navigation}: Props) => {
       });
   };
   return (
+    
     <Container>
       <Header>
         <Left>
@@ -158,6 +209,7 @@ export const ManageEvents = ({navigation}: Props) => {
               handleChange,
               handleBlur,
             }) => {
+            
               console.log(
                 'opened',
                 wasMapOpened && (errors.location as string),

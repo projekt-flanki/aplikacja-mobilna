@@ -14,6 +14,7 @@ import {
   Icon,
   Text,
   View,
+  Spinner,
 } from 'native-base';
 import Input from '../../components/input';
 import api from '../../utils/api';
@@ -52,51 +53,50 @@ const [eventname, setEventName] = useState('');
       location,
       description
   };
+  const haveParams = navigation.state.params != undefined
 
   useEffect(() => {
-    if (navigation.state.params != undefined) {
+    if (haveParams && navigation.state.params != undefined) {
       const event = navigation.state.params.eventObject;
       setEventName(event.name);
       setDescription(event.description);
       setLocation(event.location);
       setId(event.id);
       setDate(event.date);
-      console.log(initialValues);
-      console.log(id);
     }
   });
    
   
   const handleEdit = (
-    { eventname, date, description }: typeof initialValues, id, latitude, longitude): void => {
-    console.log('handle event' +id + eventname + latitude + longitude + date + description);
-    api
-      .editEvent({
-        id,
-        name: eventname,
-        latitude,
-        longitude,
-        date,
-        description,
+    { eventname, date, description }: typeof initialValues): void => {
+    console.log('handle event' ,id , eventname , positionData.latitude , positionData.longitude , date , description);
+    // api
+    //   .editEvent({
+    //     id,
+    //     name: eventname,
+    //     latitude,
+    //     longitude,
+    //     date,
+    //     description,
   
-      })  
-      .then(({ok, data}: ApiResponse<any>) => {
-        if (ok) {
-          Toast.show({
-            type: 'success',
-            text: 'Edytowano wydarzenie',
-            buttonText: 'Ok', 
-          });
-          navigation.navigate('PrivateStack');
-        } else {
-          Toast.show({
-            type: 'danger',
-            //@ts-ignore
-            text: data.message || 'Nie udało się edytować wydarzenia',
-            buttonText: 'Ok',
-          });
-        }
-      });
+    //   })  
+    //   .then(({ok, data}: ApiResponse<any>) => {
+    //     if (ok) {
+    //       Toast.show({
+    //         type: 'success',
+    //         text: 'Edytowano wydarzenie',
+    //         buttonText: 'Ok', 
+    //       });
+    //       navigation.navigate('PrivateStack');
+    //     } else {
+    //       Toast.show({
+    //         type: 'danger',
+    //         //@ts-ignore
+    //         text: data.message || 'Nie udało się edytować wydarzenia',
+    //         buttonText: 'Ok',
+    //       });
+    //     }
+      // });
   };
   const handleSubmit = (
     {eventname, date, description}: typeof initialValues,
@@ -131,6 +131,7 @@ const [eventname, setEventName] = useState('');
         }
       });
   };
+  if(haveParams && id === '') return <Spinner/>
   return (
     
     <Container>
@@ -202,7 +203,7 @@ const [eventname, setEventName] = useState('');
         <Form>
           <Formik
             initialValues={initialValues}
-            onSubmit={id? handleEdit: handleSubmit}
+            onSubmit={id!== ""? handleEdit: handleSubmit}
             validationSchema={validationSchema}>
             {({
               values: {eventname, description, date},
@@ -212,11 +213,6 @@ const [eventname, setEventName] = useState('');
               handleChange,
               handleBlur,
             }) => {
-            
-              console.log(
-                'opened',
-                wasMapOpened && (errors.location as string),
-              );
               return (
                 <View style={showMap ? {height: 0, width: 0, opacity: 0} : {}}>
                   <Input

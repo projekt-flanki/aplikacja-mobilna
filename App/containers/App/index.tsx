@@ -52,7 +52,7 @@ const AppContainer = createAppContainer(
       ManageEventsStack
     },
     {
-      initialRouteName: 'AuthStack',
+      initialRouteName: 'MyEventsStack',
     },
   ),
 );

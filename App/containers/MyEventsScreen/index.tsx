@@ -30,13 +30,24 @@ const MyEvents = ({ navigation }: Props) => {
     navigateWithParams(navigation, 'ManageEventsStack', 'ManageEvents', {eventObject: data});
   }
 
-  const [events, setMyEvents] = useState([]);
+  const [events, setMyEvents] = useState([{
+      id: '12321',
+      name: 'twoja stara',
+      latitude: 12.5,
+      longitude: 12.6,
+      date: '12/12/1998',
+      description: 'XDDD'}]);
 
-  useEffect(() => {
-    api.getMyEvents().then(({data, ok}: ApiResponse<any>) => {
-      setMyEvents(data);
-    });
-  }, []);
+  // useEffect((data) => {
+  //   // api.getMyEvents().then(({data, ok}: ApiResponse<any>) => {
+  //   //   setMyEvents(data);
+  //   // });
+
+  //   data = [{
+
+  //   }
+  //   ]
+  // }, []);
 
   return (
     <Container>

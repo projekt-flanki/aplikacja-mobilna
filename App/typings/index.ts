@@ -12,6 +12,7 @@ export interface UserInfoPayload {
   email: string;
   username: string;
   profileImageBase64: string;
+  rating: number;
 }
 
 export interface NewEventPayload{

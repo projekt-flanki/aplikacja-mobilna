@@ -21,6 +21,7 @@
     "react-native-image-picker": "^1.1.0",
     "react-native-maps": "react-native-community/react-native-maps#master",
     "react-native-reanimated": "~1.2.0",
+    "react-native-star-rating": "^1.1.0",
     "react-native-web": "^0.11.7",
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.3.3",

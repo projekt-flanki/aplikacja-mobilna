@@ -22,7 +22,7 @@ import {ApiResponse} from 'apisauce';
 type Props = {
   navigation: NavigationStackProp;
 };
-const MyEvents = ({navigation}: Props) => {
+const UserEvents = ({navigation}: Props) => {
   const [events, setMyEvents] = useState([]);
 
   useEffect(() => {
@@ -70,9 +70,9 @@ const MyEvents = ({navigation}: Props) => {
     </Container>
   );
 };
-export default MyEvents;
+export default UserEvents;
 
-MyEvents.navigationOptions = {
+UserEvents.navigationOptions = {
   header: null,
 };
 

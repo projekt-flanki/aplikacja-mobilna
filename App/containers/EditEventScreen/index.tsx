@@ -41,39 +41,6 @@ const validationSchema = Yup.object().shape({
   });
 export const EditEvent = ({ navigation }: Props) => {
     const handleSubmit = () => { };
-        // {
-        //     id,
-        //     eventname,
-        //     location,
-        //     date,
-        //     description,
-        // }: typeof initialValues) => {
-        //     api.editEvent({
-        //         id: id,
-        //         name: eventname,
-        //         location: location,
-        //         date: date,
-        //         description: description,
-        //     })
-        //         .then(({ ok }: ApiResponse<any>) => {
-        //             if (ok) {
-        //                 Toast.show({
-        //                     type: 'success',
-        //                     text: 'Edytowano wydarzenie',
-        //                     buttonText: 'Ok',
-        //                 });
-        //                 navigation.navigate('PrivateStack');
-        //             } else {
-        //                 Toast.show({
-        //                     type: 'danger',
-        //                     //@ts-ignore
-        //                     text: data.message || 'Nie udało się edytować wydarzenia',
-        //                     buttonText: 'Ok',
-        //                 });
-        //             }
-        //         });
-    
-        console.log(navigation);
         return (
           
             <Container>

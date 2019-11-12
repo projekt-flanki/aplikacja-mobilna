@@ -69,34 +69,35 @@ const [eventname, setEventName] = useState('');
   
   const handleEdit = (
     { eventname, date, description }: typeof initialValues): void => {
-    console.log('handle event' ,id , eventname , positionData.latitude , positionData.longitude , date , description);
-    // api
-    //   .editEvent({
-    //     id,
-    //     name: eventname,
-    //     latitude,
-    //     longitude,
-    //     date,
-    //     description,
+    // console.log('handle event' ,id , eventname , positionData.latitude , positionData.longitude , date , descripti,
+    const { latitude, longitude } = positionData;
+    api
+      .editEvent({
+        id,
+        name: eventname,
+        latitude,
+        longitude,
+        date,
+        description,
   
-    //   })  
-    //   .then(({ok, data}: ApiResponse<any>) => {
-    //     if (ok) {
-    //       Toast.show({
-    //         type: 'success',
-    //         text: 'Edytowano wydarzenie',
-    //         buttonText: 'Ok', 
-    //       });
-    //       navigation.navigate('PrivateStack');
-    //     } else {
-    //       Toast.show({
-    //         type: 'danger',
-    //         //@ts-ignore
-    //         text: data.message || 'Nie udało się edytować wydarzenia',
-    //         buttonText: 'Ok',
-    //       });
-    //     }
-      // });
+      })  
+      .then(({ok, data}: ApiResponse<any>) => {
+        if (ok) {
+          Toast.show({
+            type: 'success',
+            text: 'Edytowano wydarzenie',
+            buttonText: 'Ok', 
+          });
+          navigation.navigate('PrivateStack');
+        } else {
+          Toast.show({
+            type: 'danger',
+            //@ts-ignore
+            text: data.message || 'Nie udało się edytować wydarzenia',
+            buttonText: 'Ok',
+          });
+        }
+      });
   };
   const handleSubmit = (
     {eventname, date, description}: typeof initialValues,

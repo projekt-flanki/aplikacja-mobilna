@@ -25,29 +25,16 @@ type Props = {
 };
 const MyEvents = ({ navigation }: Props) => {
   const goToEvents = (data: object) => () => {
-    console.log('wysylam MAPLE NA KSIEZYC');
-    console.log( data);
     navigateWithParams(navigation, 'ManageEventsStack', 'ManageEvents', {eventObject: data});
   }
 
-  const [events, setMyEvents] = useState([{
-      id: '12321',
-      name: 'twoja stara',
-      latitude: 12.5,
-      longitude: 12.6,
-      date: '12/12/1998',
-      description: 'XDDD'}]);
+  const [events, setMyEvents] = useState([]);
 
-  // useEffect((data) => {
-  //   // api.getMyEvents().then(({data, ok}: ApiResponse<any>) => {
-  //   //   setMyEvents(data);
-  //   // });
-
-  //   data = [{
-
-  //   }
-  //   ]
-  // }, []);
+  useEffect(() => {
+    api.getMyEvents().then(({data, ok}: ApiResponse<any>) => {
+      setMyEvents(data);
+    });
+  }, []);
 
   return (
     <Container>
@@ -68,7 +55,6 @@ const MyEvents = ({ navigation }: Props) => {
           <List
             dataArray={events}
             renderRow={data => {
-              console.log(events);
               return (
                 <ListItem
                   key={data.id}

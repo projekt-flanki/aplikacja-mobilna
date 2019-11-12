@@ -1,5 +1,5 @@
 import apisauce from 'apisauce'
-import  {LoginPayload, RegisterPayload, NewEventPayload,EditEventPayload} from '../typings'
+import  {LoginPayload, RegisterPayload, NewEventPayload, UserInfoPayload, EditEventPayload} from '../typings'
 
 const baseURL = "http://40.68.3.243:8080/"
 
@@ -22,7 +22,11 @@ const create = () => {
   const getUserInfo = () => api.get('user/info')
   const addEvent = (addEventPayload: NewEventPayload) => api.post(`event/create`,addEventPayload)
   const getMyEvents = () => api.get('/event/owned')
+  const getAllEvents = () => api.get('/event/all')
   const editEvent = (editEventPayload:EditEventPayload) => api.put('/event/edit',editEventPayload) 
+  const editUser = (userInfoPayload: UserInfoPayload) => api.post('/user/edit', userInfoPayload);
+
+
   const logout = () => delete api.headers['Authorization']
 
   return {
@@ -33,6 +37,8 @@ const create = () => {
     setAuthorizationHeader,
     getUserInfo,
     getMyEvents,
+    getAllEvents,
+    editUser,
     editEvent
   }
 }

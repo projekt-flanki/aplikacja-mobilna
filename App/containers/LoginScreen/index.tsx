@@ -11,7 +11,7 @@ type Props = {
 };
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required('Fill username'),
+  username: Yup.string().required('Fill email'),
   password: Yup.string().required('Fill password'),
 });
 
@@ -66,7 +66,7 @@ export const Login = ({navigation}: Props) => {
                 <>
                   <Input
                     value={username}
-                    label="Username"
+                    label="Email"
                     onChange={handleChange('username')}
                     error={touched.username && (errors.username as string)}
                     onBlur={handleBlur('username')}

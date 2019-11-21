@@ -42,12 +42,14 @@ const [eventname, setEventName] = useState('');
   const [id, setId] = useState('');   
   const [showMap, setShowMap] = useState(false);
   const [wasMapOpened, setMapOpened] = useState(false);
+  const [ownerIds, setOwnerId] = useState(['test']);
   const [positionData, setPositionData] = useState({
     latitude: 51.7833,
     longitude: 19.4667,
   });
   
   const initialValues = {
+      ownerIds,
       eventname,
       date,
       location,
@@ -58,19 +60,22 @@ const [eventname, setEventName] = useState('');
   useEffect(() => {
     if (haveParams && navigation.state.params != undefined) {
       const event = navigation.state.params.eventObject;
+      console.log(event.ownerIds);
       setEventName(event.name);
       setDescription(event.description);
       setLocation(event.location);
       setId(event.id);
       setDate(event.date);
+      setOwnerId(event.ownerIds);
     }
   });
    
   
   const handleEdit = (
-    { eventname, date, description }: typeof initialValues): void => {
+    { eventname, date, description, ownerIds }: typeof initialValues): void => {
     // console.log('handle event' ,id , eventname , positionData.latitude , positionData.longitude , date , descripti,
     const { latitude, longitude } = positionData;
+    console.log('handle edit'+ ownerIds);
     api
       .editEvent({
         id,
@@ -78,8 +83,8 @@ const [eventname, setEventName] = useState('');
         latitude,
         longitude,
         date,
-        description,
-  
+        ownerIds,
+        description
       })  
       .then(({ok, data}: ApiResponse<any>) => {
         if (ok) {

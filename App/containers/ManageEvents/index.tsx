@@ -60,10 +60,9 @@ const [eventname, setEventName] = useState('');
   useEffect(() => {
     if (haveParams && navigation.state.params != undefined) {
       const event = navigation.state.params.eventObject;
-      console.log(event.ownerIds);
       setEventName(event.name);
       setDescription(event.description);
-      setLocation(event.location);
+      setLocation(event.latitude + ' ' + event.longitude);
       setId(event.id);
       setDate(event.date);
       setOwnerId(event.ownerIds);
@@ -73,7 +72,6 @@ const [eventname, setEventName] = useState('');
   
   const handleEdit = (
     { eventname, date, description, ownerIds }: typeof initialValues): void => {
-    // console.log('handle event' ,id , eventname , positionData.latitude , positionData.longitude , date , descripti,
     const { latitude, longitude } = positionData;
     console.log('handle edit'+ ownerIds);
     api

@@ -1,7 +1,7 @@
 import apisauce from 'apisauce'
 import  {LoginPayload, RegisterPayload, NewEventPayload, UserInfoPayload} from '../typings'
 
-const baseURL = "http://40.68.3.243:8080/"
+const baseURL = "http://34.240.172.124:8080/"
 
 const create = () => {
   const THIRTY_SECONDS_TIMEOUT = 30000

@@ -26,9 +26,8 @@ type Props = {
 };
 const AllEvents = ({navigation}: Props) => {
   const assignToEvent = (data: object) => () => {
-    console.log(data);
-        const { uuid } = data.id as AssignEventPayload;
-        api.assignEvent({ uuid })  .then(({ok, data}: ApiResponse<any>) => {
+    const { id } = data;
+        api.assignEvent({ eventId:id }).then(({ok, data}: ApiResponse<any>) => {
           if (ok) {
             Toast.show({
               type: 'success',
@@ -40,7 +39,7 @@ const AllEvents = ({navigation}: Props) => {
             Toast.show({
               type: 'danger',
               //@ts-ignore
-              text: data.message || 'Nie udało się przypisać do wydarzenia',
+              text: data.message || 'Już się przypisałeś do wydarzenia',
               buttonText: 'Ok',
             });
           }
@@ -87,11 +86,11 @@ const AllEvents = ({navigation}: Props) => {
                     <Text style={{marginLeft: 5}}>{data.location}</Text>
                   </Left>
                   <Right>
-                    <Button
+                    <Button 
                       style={{backgroundColor: 'white'}}
                       onPress={assignToEvent(data)}>
                       <Icon
-                        active
+                        active 
                         name="md-checkbox-outline"
                       
                         style={{fontSize: 20, color: 'gray'}}

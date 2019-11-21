@@ -28,5 +28,5 @@ export interface EditEventPayload extends NewEventPayload{
   ownerIds: string[];
 }
 export interface AssignEventPayload{
-  uuid: string;
+  eventId: string;
 }

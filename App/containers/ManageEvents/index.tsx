@@ -165,7 +165,7 @@ const [eventname, setEventName] = useState('');
             left: 0,
             right: 0,
             bottom: 0,
-            ...(!showMap && { opacity: 0, zIndex: -1}),
+            ...(!showMap && {opacity: 0, zIndex: -1}),
           }}
           showsUserLocation
           provider={PROVIDER_GOOGLE}

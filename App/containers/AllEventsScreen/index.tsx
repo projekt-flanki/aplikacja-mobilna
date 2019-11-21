@@ -26,8 +26,7 @@ type Props = {
 };
 const AllEvents = ({navigation}: Props) => {
   const assignToEvent = (data: object) => () => {
-    api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
-      if (ok) {
+    console.log(data);
         const { uuid } = data.id as AssignEventPayload;
         api.assignEvent({ uuid })  .then(({ok, data}: ApiResponse<any>) => {
           if (ok) {
@@ -46,16 +45,6 @@ const AllEvents = ({navigation}: Props) => {
             });
           }
         });
-      
-      } else {
-        Toast.show({
-          type: 'danger',
-          //@ts-ignore
-          text: 'Błąd podczas pobierania danych użytkownika',
-          buttonText: 'Ok',
-        });
-      }
-    });
   };
   const [events, setMyEvents] = useState([]);
 

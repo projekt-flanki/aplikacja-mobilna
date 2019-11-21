@@ -8,6 +8,7 @@ import {
   Header,
   Icon,
   Left,
+  Toast,
   List,
   ListItem,
   Right,
@@ -18,11 +19,44 @@ import api from '../../utils/api';
 import {NavigationStackProp} from 'react-navigation-stack';
 import dayjs from 'dayjs';
 import {ApiResponse} from 'apisauce';
+import { AssignEventPayload } from 'App/typings';
 
 type Props = {
   navigation: NavigationStackProp;
 };
 const AllEvents = ({navigation}: Props) => {
+  const assignToEvent = (data: object) => () => {
+    api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
+      if (ok) {
+        const { uuid } = data.id as AssignEventPayload;
+        api.assignEvent({ uuid })  .then(({ok, data}: ApiResponse<any>) => {
+          if (ok) {
+            Toast.show({
+              type: 'success',
+              text: 'Przypisałeś się do wydarzenia',
+              buttonText: 'Ok', 
+            });
+            navigation.navigate('PrivateStack');
+          } else {
+            Toast.show({
+              type: 'danger',
+              //@ts-ignore
+              text: data.message || 'Nie udało się przypisać do wydarzenia',
+              buttonText: 'Ok',
+            });
+          }
+        });
+      
+      } else {
+        Toast.show({
+          type: 'danger',
+          //@ts-ignore
+          text: 'Błąd podczas pobierania danych użytkownika',
+          buttonText: 'Ok',
+        });
+      }
+    });
+  };
   const [events, setMyEvents] = useState([]);
 
   useEffect(() => {
@@ -56,11 +90,26 @@ const AllEvents = ({navigation}: Props) => {
                   // button
                   // onPress={() => navigation.navigate(data.route)}
                 >
-                  <Text>{dayjs(data.date).format('DD MM YYYY')}</Text>
-                  <Text style={{fontWeight: 'bold', marginLeft: 5}}>
-                    {data.name}
-                  </Text>
-                  <Text style={{marginLeft: 5}}>{data.location}</Text>
+                  <Left>
+                    <Text>{dayjs(data.date).format('DD MM YYYY')}</Text>
+                    <Text style={{fontWeight: 'bold', marginLeft: 5}}>
+                      {data.name}
+                    </Text>
+                    <Text style={{marginLeft: 5}}>{data.location}</Text>
+                  </Left>
+                  <Right>
+                    <Button
+                      style={{backgroundColor: 'white'}}
+                      onPress={assignToEvent(data)}>
+                      <Icon
+                        active
+                        name="md-checkbox-outline"
+                      
+                        style={{fontSize: 20, color: 'gray'}}
+                      />
+                      <Text>Dołącz</Text>
+                    </Button>
+                  </Right>
                 </ListItem>
               );
             }}

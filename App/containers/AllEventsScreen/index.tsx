@@ -39,7 +39,7 @@ const AllEvents = ({navigation}: Props) => {
             Toast.show({
               type: 'danger',
               //@ts-ignore
-              text: data.message || 'Już się przypisałeś do wydarzenia',
+              text: data.message || 'Błąd podczas przypisywania się do wydarzenia',
               buttonText: 'Ok',
             });
           }

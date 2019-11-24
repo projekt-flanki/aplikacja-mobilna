@@ -23,6 +23,7 @@ import {Formik, FormikBag} from 'formik';
 import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import dayjs from 'dayjs';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -35,7 +36,7 @@ const validationSchema = Yup.object().shape({
 
 export const ManageEvents = ({ navigation }: Props) => {
 
-const [eventname, setEventName] = useState('');
+  const [eventname, setEventName] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
@@ -51,8 +52,8 @@ const [eventname, setEventName] = useState('');
   const initialValues = {
       ownerIds,
       eventname,
-      date,
       location,
+      date,
       description
   };
   const haveParams = navigation.state.params != undefined
@@ -62,7 +63,10 @@ const [eventname, setEventName] = useState('');
       const event = navigation.state.params.eventObject;
       setEventName(event.name);
       setDescription(event.description);
-      setLocation(event.latitude + ' ' + event.longitude);
+      setPositionData({
+        latitude: event.latitude,
+        longitude: event.longitude
+      });
       setId(event.id);
       setDate(event.date);
       setOwnerId(event.ownerIds);
@@ -73,7 +77,6 @@ const [eventname, setEventName] = useState('');
   const handleEdit = (
     { eventname, date, description, ownerIds }: typeof initialValues): void => {
     const { latitude, longitude } = positionData;
-    console.log('handle edit'+ ownerIds);
     api
       .editEvent({
         id,
@@ -102,6 +105,7 @@ const [eventname, setEventName] = useState('');
         }
       });
   };
+
   const handleSubmit = (
     {eventname, date, description}: typeof initialValues,
     {setFieldError}: any,
@@ -135,6 +139,20 @@ const [eventname, setEventName] = useState('');
         }
       });
   };
+
+  const teamWonAction = (teamId: number) => () => {
+    api.teamWin({
+      eventId: id,
+      teamNumber: teamId
+    }).then(() => {
+      Toast.show({
+        type: 'success',
+        text: `Druzyna ${teamId + 1} won`,
+        buttonText: 'Ok', 
+      });
+    })
+  }
+
   if(haveParams && id === '') return <Spinner/>
   return (
     
@@ -217,8 +235,9 @@ const [eventname, setEventName] = useState('');
               handleChange,
               handleBlur,
             }) => {
+              if(showMap) return <></>
               return (
-                <View style={showMap ? {height: 0, width: 0, opacity: 0} : {}}>
+                <View>
                   <Input
                     value={eventname}
                     label="Nazwa wydarzenia"
@@ -233,7 +252,7 @@ const [eventname, setEventName] = useState('');
                     }}
                     disabled
                     value={
-                      !wasMapOpened
+                      !wasMapOpened && !id
                         ? ''
                         : `${positionData.latitude.toFixed(
                             4,
@@ -274,12 +293,18 @@ const [eventname, setEventName] = useState('');
                     onDateChange={handleChange('date')}
                     disabled={false}
                   />
-                  {/* <Icon name="paperclip" />
-                  <Text> Wybierz zdjęcie do wydarzenia</Text>
-                  <Thumbnail small source={{ uri }} /> */}
+
                   <Button onPress={handleSubmit} full style={{marginTop: 10}}>
                     <Text>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
                   </Button>
+                  {dayjs(date).isAfter(dayjs()) && id && <>
+                  <Button onPress={teamWonAction(0)}>
+                    <Text>Wygrala druzyna 1</Text>
+                  </Button>
+                  <Button onPress={teamWonAction(1)}>
+                    <Text>Wygrala druzyna 2</Text>  
+                  </Button>
+                  </>}
                 </View>
               );
             }}

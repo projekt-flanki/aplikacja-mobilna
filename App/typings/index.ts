@@ -30,3 +30,7 @@ export interface EditEventPayload extends NewEventPayload{
 export interface AssignEventPayload{
   eventId: string;
 }
+
+export interface TeamWinPayload extends AssignEventPayload{
+  teamNumber: Number;
+}

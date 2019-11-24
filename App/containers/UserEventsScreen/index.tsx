@@ -18,11 +18,16 @@ import api from '../../utils/api';
 import {NavigationStackProp} from 'react-navigation-stack';
 import dayjs from 'dayjs';
 import {ApiResponse} from 'apisauce';
+import navigateWithParams from '../../utils/navigateWithParams';
 
 type Props = {
   navigation: NavigationStackProp;
 };
-const UserEvents = ({navigation}: Props) => {
+const UserEvents = ({ navigation }: Props) => {
+  const goToEvents = (data: object) => () => {
+    navigateWithParams(navigation, 'ManageEventsStack', 'ManageEvents', {eventObject: data});
+  }
+
   const [events, setMyEvents] = useState([]);
 
   useEffect(() => {
@@ -56,11 +61,19 @@ const UserEvents = ({navigation}: Props) => {
                   // button
                   // onPress={() => navigation.navigate(data.route)}
                 >
+                  <Left>
                   <Text>{dayjs(data.date).format('DD MM YYYY')}</Text>
                   <Text style={{fontWeight: 'bold', marginLeft: 5}}>
                     {data.name}
                   </Text>
-                  <Text style={{marginLeft: 5}}>{data.location}</Text>
+                  <Text style={{ marginLeft: 5 }}>{data.location}</Text>
+                  </Left>
+                  <Right>
+                    <Button style={{ backgroundColor: "white"}} onPress={goToEvents(data)}>
+                      <Icon active name="settings" style={{ fontSize: 20, color: 'gray' }} />
+                      <Text>Edytuj</Text>
+              </Button>
+              </Right>
                 </ListItem>
               );
             }}

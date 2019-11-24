@@ -22,3 +22,15 @@ export interface NewEventPayload{
   date: string;
   description: string;
 }
+
+export interface EditEventPayload extends NewEventPayload{
+  id: string;
+  ownerIds: string[];
+}
+export interface AssignEventPayload{
+  eventId: string;
+}
+
+export interface TeamWinPayload extends AssignEventPayload{
+  teamNumber: Number;
+}

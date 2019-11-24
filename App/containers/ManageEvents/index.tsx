@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {NavigationStackProp} from 'react-navigation-stack';
 import {
   Container,
@@ -14,6 +14,7 @@ import {
   Icon,
   Text,
   View,
+  Spinner,
 } from 'native-base';
 import Input from '../../components/input';
 import api from '../../utils/api';
@@ -21,30 +22,90 @@ import * as Yup from 'yup';
 import {Formik, FormikBag} from 'formik';
 import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import dayjs from 'dayjs';
 
 type Props = {
   navigation: NavigationStackProp;
 };
-const initialValues = {
-  eventname: '',
-  date: '',
-  location: '',
-  description: '',
-  hours: '',
-};
+
 const validationSchema = Yup.object().shape({
   eventname: Yup.string().required('Uzupełnij nazwę wydarzenia'),
   // date: Yup.string().required("Uzupełnij datę")
 });
 
-export const AddEvent = ({navigation}: Props) => {
+export const ManageEvents = ({ navigation }: Props) => {
+
+  const [eventname, setEventName] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [id, setId] = useState('');   
+  const [showMap, setShowMap] = useState(false);
   const [wasMapOpened, setMapOpened] = useState(false);
+  const [ownerIds, setOwnerId] = useState(['test']);
   const [positionData, setPositionData] = useState({
     latitude: 51.7833,
     longitude: 19.4667,
   });
-  const [showMap, setShowMap] = useState(false);
+  
+  const initialValues = {
+      ownerIds,
+      eventname,
+      location,
+      date,
+      description
+  };
+  const haveParams = navigation.state.params != undefined
+
+  useEffect(() => {
+    if (haveParams && navigation.state.params != undefined) {
+      const event = navigation.state.params.eventObject;
+      setEventName(event.name);
+      setDescription(event.description);
+      setPositionData({
+        latitude: event.latitude,
+        longitude: event.longitude
+      });
+      setId(event.id);
+      setDate(event.date);
+      setOwnerId(event.ownerIds);
+    }
+  });
+   
+  
+  const handleEdit = (
+    { eventname, date, description, ownerIds }: typeof initialValues): void => {
+    const { latitude, longitude } = positionData;
+    api
+      .editEvent({
+        id,
+        name: eventname,
+        latitude,
+        longitude,
+        date,
+        ownerIds,
+        description
+      })  
+      .then(({ok, data}: ApiResponse<any>) => {
+        if (ok) {
+          Toast.show({
+            type: 'success',
+            text: 'Edytowano wydarzenie',
+            buttonText: 'Ok', 
+          });
+          navigation.navigate('PrivateStack');
+        } else {
+          Toast.show({
+            type: 'danger',
+            //@ts-ignore
+            text: data.message || 'Nie udało się edytować wydarzenia',
+            buttonText: 'Ok',
+          });
+        }
+      });
+  };
+
   const handleSubmit = (
     {eventname, date, description}: typeof initialValues,
     {setFieldError}: any,
@@ -65,7 +126,7 @@ export const AddEvent = ({navigation}: Props) => {
           Toast.show({
             type: 'success',
             text: 'Utworzono wydarzenie',
-            buttonText: 'Ok',
+            buttonText: 'Ok', 
           });
           navigation.navigate('PrivateStack');
         } else {
@@ -78,7 +139,23 @@ export const AddEvent = ({navigation}: Props) => {
         }
       });
   };
+
+  const teamWonAction = (teamId: number) => () => {
+    api.teamWin({
+      eventId: id,
+      teamNumber: teamId
+    }).then(() => {
+      Toast.show({
+        type: 'success',
+        text: `Druzyna ${teamId + 1} won`,
+        buttonText: 'Ok', 
+      });
+    })
+  }
+
+  if(haveParams && id === '') return <Spinner/>
   return (
+    
     <Container>
       <Header>
         <Left>
@@ -89,7 +166,7 @@ export const AddEvent = ({navigation}: Props) => {
           </Button>
         </Left>
         <Body>
-          <Title>Stwórz wydarzenie</Title>
+          <Title>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Title>
         </Body>
       </Header>
       <Content
@@ -148,7 +225,7 @@ export const AddEvent = ({navigation}: Props) => {
         <Form>
           <Formik
             initialValues={initialValues}
-            onSubmit={handleSubmit}
+            onSubmit={id!== ""? handleEdit: handleSubmit}
             validationSchema={validationSchema}>
             {({
               values: {eventname, description, date},
@@ -158,12 +235,9 @@ export const AddEvent = ({navigation}: Props) => {
               handleChange,
               handleBlur,
             }) => {
-              console.log(
-                'opened',
-                wasMapOpened && (errors.location as string),
-              );
+              if(showMap) return <></>
               return (
-                <View style={showMap ? {height: 0, width: 0, opacity: 0} : {}}>
+                <View>
                   <Input
                     value={eventname}
                     label="Nazwa wydarzenia"
@@ -178,7 +252,7 @@ export const AddEvent = ({navigation}: Props) => {
                     }}
                     disabled
                     value={
-                      !wasMapOpened
+                      !wasMapOpened && !id
                         ? ''
                         : `${positionData.latitude.toFixed(
                             4,
@@ -219,12 +293,18 @@ export const AddEvent = ({navigation}: Props) => {
                     onDateChange={handleChange('date')}
                     disabled={false}
                   />
-                  {/* <Icon name="paperclip" />
-                  <Text> Wybierz zdjęcie do wydarzenia</Text>
-                  <Thumbnail small source={{ uri }} /> */}
+
                   <Button onPress={handleSubmit} full style={{marginTop: 10}}>
-                    <Text>Utwórz wydarzenie</Text>
+                    <Text>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
                   </Button>
+                  {dayjs(date).isAfter(dayjs()) && id && <>
+                  <Button onPress={teamWonAction(0)}>
+                    <Text>Wygrala druzyna 1</Text>
+                  </Button>
+                  <Button onPress={teamWonAction(1)}>
+                    <Text>Wygrala druzyna 2</Text>  
+                  </Button>
+                  </>}
                 </View>
               );
             }}
@@ -234,8 +314,8 @@ export const AddEvent = ({navigation}: Props) => {
     </Container>
   );
 };
-AddEvent.navigationOptions = {
+ManageEvents.navigationOptions = {
   header: null,
 };
 
-export default AddEvent;
+export default ManageEvents;

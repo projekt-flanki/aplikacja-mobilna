@@ -3,8 +3,11 @@ import {Root} from 'native-base';
 import Login from '../LoginScreen';
 import Register from '../RegisterScreen';
 import HomeScreen from '../HomeScreen';
+import MyEvents from '../AllEventsScreen';
+import ManageEvents from '../ManageEvents';
+
 import AllEvents from '../AllEventsScreen';
-import AddEvent from '../AddEventScreen';
+// import AddEvent from '../AddEventScreen';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
@@ -18,7 +21,9 @@ const RegisterStack = createStackNavigator({Register});
 // const DrawerOpen = createStackNavigator( {SideBar});
 const AllEventsStack = createStackNavigator({AllEvents});
 const TempStack = createStackNavigator({TempPage});
-const AddEventStack = createStackNavigator({AddEvent});
+const ManageEventsStack = createStackNavigator({ManageEvents});
+const MyEventsStack = createStackNavigator({ MyEvents });
+// const AddEventStack = createStackNavigator({AddEvent});
 const EditProfileStack = createStackNavigator({EditProfile});
 const UserEventsStack = createStackNavigator({UserEvents});
 
@@ -31,7 +36,7 @@ const HomeScreenRouter = createDrawerNavigator(
       screen: TempStack,
     },
     'Dodaj wydarzenie': {
-      screen: AddEventStack,
+      screen: ManageEventsStack,
     },
     'Wszystkie wydarzenia': {
       screen: AllEventsStack,
@@ -53,8 +58,10 @@ const AppContainer = createAppContainer(
       AuthStack,
       RegisterStack,
       HomeScreenRouter,
+      MyEventsStack,
+      ManageEventsStack,
       AllEventsStack,
-      AddEventStack,
+      // AddEventStack,
       EditProfileStack,
     },
     {

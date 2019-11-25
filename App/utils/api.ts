@@ -23,11 +23,13 @@ const create = () => {
   const addEvent = (addEventPayload: NewEventPayload) => api.post(`event/create`,addEventPayload)
   const getMyEvents = () => api.get('/event/owned')
   const getAllEvents = () => api.get('/event/all')
-  const editEvent = (editEventPayload:EditEventPayload) => api.put('/event/edit',editEventPayload) 
+  const editEvent = (editEventPayload:EditEventPayload) => api.put('/event/edit',editEventPayload)
   const editUser = (userInfoPayload: UserInfoPayload) => api.post('/user/edit', userInfoPayload);
   const assignEvent = (assignEventPayload: AssignEventPayload) => api.post('/event/join', assignEventPayload);
   const teamWin = (teamWinPayload: TeamWinPayload) => api.post('/event/finalize', teamWinPayload)
- 
+  const getUserRanking = () => api.get('/user/rating-rank');
+  const getUserPoints = () => api.get('/user/points-rank');
+
 
   const logout = () => delete api.headers['Authorization']
 
@@ -43,7 +45,9 @@ const create = () => {
     editUser,
     editEvent,
     assignEvent,
-    teamWin
+    teamWin,
+    getUserRanking,
+    getUserPoints
   }
 }
 

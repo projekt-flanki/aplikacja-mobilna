@@ -32,7 +32,7 @@ const AllEvents = ({navigation}: Props) => {
             Toast.show({
               type: 'success',
               text: 'Przypisałeś się do wydarzenia',
-              buttonText: 'Ok', 
+              buttonText: 'Ok',
             });
             navigation.navigate('PrivateStack');
           } else {
@@ -86,13 +86,13 @@ const AllEvents = ({navigation}: Props) => {
                     <Text style={{marginLeft: 5}}>{data.location}</Text>
                   </Left>
                   <Right>
-                    <Button 
+                    <Button
                       style={{backgroundColor: 'white'}}
                       onPress={assignToEvent(data)}>
                       <Icon
-                        active 
+                        active
                         name="md-checkbox-outline"
-                      
+
                         style={{fontSize: 20, color: 'gray'}}
                       />
                       <Text>Dołącz</Text>

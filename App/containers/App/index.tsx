@@ -11,7 +11,7 @@ import AllEvents from '../AllEventsScreen';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import TempPage from '../TempPageScreen';
+import RankingPage from '../RankingScreen';
 import EditProfile from '../EditProfileScreen';
 import UserEvents from '../UserEventsScreen';
 
@@ -20,12 +20,12 @@ const PrivateStack = createStackNavigator({HomeScreen});
 const RegisterStack = createStackNavigator({Register});
 // const DrawerOpen = createStackNavigator( {SideBar});
 const AllEventsStack = createStackNavigator({AllEvents});
-const TempStack = createStackNavigator({TempPage});
-const ManageEventsStack = createStackNavigator({ManageEvents});
-const MyEventsStack = createStackNavigator({ MyEvents });
-// const AddEventStack = createStackNavigator({AddEvent});
+const RankingStack = createStackNavigator({RankingPage});
 const EditProfileStack = createStackNavigator({EditProfile});
 const UserEventsStack = createStackNavigator({UserEvents});
+const ManageEventsStack = createStackNavigator({ManageEvents});
+const MyEventsStack = createStackNavigator({ MyEvents });
+
 
 const HomeScreenRouter = createDrawerNavigator(
   {
@@ -33,7 +33,7 @@ const HomeScreenRouter = createDrawerNavigator(
       screen: PrivateStack,
     },
     Ranking: {
-      screen: TempStack,
+      screen: RankingStack,
     },
     'Dodaj wydarzenie': {
       screen: ManageEventsStack,
@@ -58,11 +58,10 @@ const AppContainer = createAppContainer(
       AuthStack,
       RegisterStack,
       HomeScreenRouter,
+      AllEventsStack,
+      EditProfileStack,
       MyEventsStack,
       ManageEventsStack,
-      AllEventsStack,
-      // AddEventStack,
-      EditProfileStack,
     },
     {
       initialRouteName: 'AuthStack',

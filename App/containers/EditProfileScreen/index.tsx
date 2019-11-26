@@ -137,6 +137,10 @@ export const EditProfile = ({navigation}: Props) => {
                   />
                   <StarRating
                     disabled={false}
+                    emptyStar={'ios-star-outline'}
+                    fullStar={'ios-star'}
+                    halfStar={'ios-star-half'}
+                    iconSet={'Ionicons'}
                     maxStars={5}
                     rating={starsCount}
                     selectedStar={(rating: any) => onStarRatingPress(rating)}

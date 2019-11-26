@@ -20,6 +20,7 @@ import {DrawerActions} from 'react-navigation-drawer';
 import {NavigationStackProp} from 'react-navigation-stack';
 import api from '../../utils/api';
 import {ApiResponse} from 'apisauce';
+import navigateWithParams from '../../utils/navigateWithParams';
 
 const starUri =
   'https://cdn2.iconfinder.com/data/icons/modifiers-add-on-1-flat/48/Mod_Add-On_1-35-512.png';
@@ -76,7 +77,17 @@ const RankingPage = ({navigation}: Props) => {
                 dataArray={userRanking}
                 renderRow={data => {
                   return (
-                    <ListItem key={data.id}>
+                    <ListItem
+                      key={data.id}
+                      button
+                      onPress={() =>
+                        navigateWithParams(
+                          navigation,
+                          'EditOtherProfileStack',
+                          'EditOtherProfileScreen',
+                          {uuid: data.uuid},
+                        )
+                      }>
                       <Left>
                         <Text> {data.username} </Text>
                       </Left>
@@ -122,15 +133,3 @@ export default RankingPage;
 RankingPage.navigationOptions = {
   header: null,
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 22,
-//   },
-//   item: {
-//     padding: 10,
-//     fontSize: 18,
-//     height: 44,
-//   },
-// });

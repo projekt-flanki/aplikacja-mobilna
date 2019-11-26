@@ -14,6 +14,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import RankingPage from '../RankingScreen';
 import EditProfile from '../EditProfileScreen';
 import UserEvents from '../UserEventsScreen';
+import EditOtherProfileScreen from '../EditOtherProfileScreen';
 
 const AuthStack = createStackNavigator({Login});
 const PrivateStack = createStackNavigator({HomeScreen});
@@ -24,8 +25,8 @@ const RankingStack = createStackNavigator({RankingPage});
 const EditProfileStack = createStackNavigator({EditProfile});
 const UserEventsStack = createStackNavigator({UserEvents});
 const ManageEventsStack = createStackNavigator({ManageEvents});
-const MyEventsStack = createStackNavigator({ MyEvents });
-
+const MyEventsStack = createStackNavigator({MyEvents});
+const EditOtherProfileStack = createStackNavigator({EditOtherProfileScreen});
 
 const HomeScreenRouter = createDrawerNavigator(
   {
@@ -62,6 +63,7 @@ const AppContainer = createAppContainer(
       EditProfileStack,
       MyEventsStack,
       ManageEventsStack,
+      EditOtherProfileStack,
     },
     {
       initialRouteName: 'AuthStack',

@@ -5,6 +5,7 @@ import Register from '../RegisterScreen';
 import HomeScreen from '../HomeScreen';
 import MyEvents from '../AllEventsScreen';
 import ManageEvents from '../ManageEvents';
+import EventDetails from '../EventDetailsScren';
 
 import AllEvents from '../AllEventsScreen';
 // import AddEvent from '../AddEventScreen';
@@ -25,7 +26,7 @@ const EditProfileStack = createStackNavigator({EditProfile});
 const UserEventsStack = createStackNavigator({UserEvents});
 const ManageEventsStack = createStackNavigator({ManageEvents});
 const MyEventsStack = createStackNavigator({ MyEvents });
-
+const EventDetailsStack = createStackNavigator({ EventDetails });
 
 const HomeScreenRouter = createDrawerNavigator(
   {
@@ -62,6 +63,7 @@ const AppContainer = createAppContainer(
       EditProfileStack,
       MyEventsStack,
       ManageEventsStack,
+      EventDetailsStack
     },
     {
       initialRouteName: 'AuthStack',

@@ -24,6 +24,7 @@ import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import dayjs from 'dayjs';
+import { EventDetailsPayload, EventUserDetails } from 'App/typings';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -44,34 +45,49 @@ export const ManageEvents = ({ navigation }: Props) => {
   const [showMap, setShowMap] = useState(false);
   const [wasMapOpened, setMapOpened] = useState(false);
   const [ownerIds, setOwnerId] = useState(['test']);
+  const [firstTeam, setFirstTeam] = useState<EventUserDetails[]>([])
+  const [secondTeam, setSecondTeam] = useState<EventUserDetails[]>([])
   const [positionData, setPositionData] = useState({
     latitude: 51.7833,
     longitude: 19.4667,
   });
-  
-  const initialValues = {
-      ownerIds,
-      eventname,
-      location,
-      date,
-      description
-  };
-  const haveParams = navigation.state.params != undefined
+
+  const haveParams = navigation.state.params !== undefined
+
+  const fetchEventData = (id: string) => {
+    api.getEventDetails(id).then(({data, ok}) => {
+      if(ok) {
+        const {
+          id,
+          firstTeam,
+          secondTeam,
+          longitude,
+          latitude,
+          date,
+          description,
+          name,
+        } = data as EventDetailsPayload
+        setId(id)
+        setDescription(description)
+        setDate(date)
+        setEventName(name)
+        setPositionData({
+          latitude,
+          longitude
+        })
+        setFirstTeam(firstTeam)
+        setSecondTeam(secondTeam)
+      }
+    })
+  }
+
 
   useEffect(() => {
-    if (haveParams && navigation.state.params != undefined) {
-      const event = navigation.state.params.eventObject;
-      setEventName(event.name);
-      setDescription(event.description);
-      setPositionData({
-        latitude: event.latitude,
-        longitude: event.longitude
-      });
-      setId(event.id);
-      setDate(event.date);
-      setOwnerId(event.ownerIds);
+    if (haveParams && navigation.state.params !== undefined) {
+      const id = navigation.state.params.eventObject.id;
+      fetchEventData(id)
     }
-  });
+  }, []);
    
   
   const handleEdit = (
@@ -107,7 +123,7 @@ export const ManageEvents = ({ navigation }: Props) => {
   };
 
   const handleSubmit = (
-    {eventname, date, description}: typeof initialValues,
+    {eventname, date, description}: any,
     {setFieldError}: any,
   ) => {
     if (!wasMapOpened) {
@@ -154,8 +170,17 @@ export const ManageEvents = ({ navigation }: Props) => {
   }
 
   if(haveParams && id === '') return <Spinner/>
+
+    const initialValues = {
+      ownerIds,
+      eventname,
+      location,
+      date,
+      description
+  };
+
   return (
-    
+
     <Container>
       <Header>
         <Left>
@@ -228,7 +253,7 @@ export const ManageEvents = ({ navigation }: Props) => {
             onSubmit={id!== ""? handleEdit: handleSubmit}
             validationSchema={validationSchema}>
             {({
-              values: {eventname, description, date},
+              values,
               errors,
               touched,
               handleSubmit,
@@ -276,7 +301,7 @@ export const ManageEvents = ({ navigation }: Props) => {
                   <Text> Wybierz datę</Text>
                   <DatePicker
                     defaultDate={new Date()}
-                    minimumDate={new Date()}
+                    // minimumDate={new Date()}
                     maximumDate={new Date(2021, 12, 31)}
                     locale={'pl'}
                     timeZoneOffsetInMinutes={undefined}
@@ -294,17 +319,35 @@ export const ManageEvents = ({ navigation }: Props) => {
                     disabled={false}
                   />
 
+                  <View style={{width: '80%', marginTop: 10, paddingLeft: '5%', display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{width:'60%', padding: 10, borderColor: 'blue', borderWidth: 1}}>
+                      <Text style={{fontWeight: 'bold', alignSelf: 'center'}}>Druzyna niebieska</Text>
+                        {firstTeam.map(({username}) =>
+                          <Text>- {username}</Text>
+                        )}
+                    </View>
+                    <View style={{width:'60%', padding: 10, borderColor: 'green', borderWidth: 1}}>
+                      <Text style={{fontWeight: 'bold', alignSelf: 'center'}}>Druzyna zielona</Text>
+                      {secondTeam.map(({username}) =>
+                        <Text>- {username}</Text>
+                      )}
+                    </View>
+                  </View>
+
                   <Button onPress={handleSubmit} full style={{marginTop: 10}}>
-                    <Text>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
+                    <Text>{id ? 'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
                   </Button>
-                  {dayjs(date).isAfter(dayjs()) && id && <>
-                  <Button onPress={teamWonAction(0)}>
-                    <Text>Wygrala druzyna 1</Text>
+                  {dayjs(date).isBefore(dayjs()) && id && <>  
+                  <Button full style={{marginTop:10}} onPress={teamWonAction(0)}>
+                    <Text>Wygrala druzyna niebieska</Text>
                   </Button>
-                  <Button onPress={teamWonAction(1)}>
-                    <Text>Wygrala druzyna 2</Text>  
+                  <Button full style={{marginTop:10}}  onPress={teamWonAction(1)}>
+                    <Text>Wygrala druzyna zielona</Text>  
                   </Button>
                   </>}
+                    <Text style={{color: 'white'}}>
+                      asasjfaijafiafsijafsijf asdjasdsaj adsj da ads das s 
+                    </Text>    
                 </View>
               );
             }}

@@ -22,6 +22,7 @@ import {UserInfoPayload} from '../../typings';
 import {ApiResponse} from 'apisauce';
 import {DrawerActions} from 'react-navigation-drawer';
 import * as events from 'events';
+import { User } from '../../utils/User';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -56,6 +57,7 @@ export const HomeScreen = ({navigation}: Props) => {
     api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
       if (ok) {
         setUser(data);
+        User.userId = data.id;
         setStarCount(data.rating);
       } else {
         Toast.show({

@@ -146,7 +146,7 @@ export const EventDetailsScreens = ({ navigation }: Props) => {
           <Text style={{fontSize:20, margin: 10}}>{eventname}</Text>
           {owner && <Text style={{margin:10}}>Stworzony przez <Text style={{fontWeight: 'bold'}}>{owner.username}</Text></Text>}
           <Text  style={{margin:10}}>{description}</Text>
-          <Text  style={{margin:10}}>{dayjs(date).format("hh:mm DD/MM/YYYY ")}</Text>
+          <Text  style={{margin:10}}>{dayjs(date).format("HH:mm DD/MM/YYYY ")}</Text>
           <MapView
           style={{
             height: 100,

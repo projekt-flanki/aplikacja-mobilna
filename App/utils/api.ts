@@ -29,7 +29,7 @@ const create = () => {
   const teamWin = (teamWinPayload: TeamWinPayload) => api.post('/event/finalize', teamWinPayload)
   const getUserRanking = () => api.get('/user/rating-rank');
   const getUserPoints = () => api.get('/user/points-rank');
-  const getUserByUuid = (uuid: String) => api.get('/user/get', {uuid});
+  const getUserByUuid = (uuid: String) => api.get(`/user/get/${uuid}`);
 
 
   const logout = () => delete api.headers['Authorization']

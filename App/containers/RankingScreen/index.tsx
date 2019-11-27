@@ -85,7 +85,7 @@ const RankingPage = ({navigation}: Props) => {
                           navigation,
                           'EditOtherProfileStack',
                           'EditOtherProfileScreen',
-                          {uuid: data.uuid},
+                          {uuid: data.id},
                         )
                       }>
                       <Left>

@@ -60,10 +60,10 @@ export const EditOtherProfileScreen = ({navigation}: Props) => {
 
 
     useEffect(() => {
-        api.getUserByUuid(navigation.getParam('uuid', 'NO-ID')).then(({data, ok}: ApiResponse<any>) => {
+      const id =  navigation.state.params ? navigation.state.params.uuid : ''
+        api.getUserByUuid(id).then(({data, ok}: ApiResponse<any>) => {
             if (ok) {
                 const {username, profileImageBase64, rating, email} = data as UserInfoPayload;
-                console.log(username);
                 setUserName(username);
                 setImage(profileImageBase64);
                 setStarCount(rating);
@@ -115,7 +115,7 @@ export const EditOtherProfileScreen = ({navigation}: Props) => {
           </Button>
         </Left>
         <Body>
-          <Title>Profil użytkownika {user.username}</Title>
+          <Title>Profil użytkownika {userName}</Title>
         </Body>
       </Header>
       <Content
@@ -125,11 +125,11 @@ export const EditOtherProfileScreen = ({navigation}: Props) => {
           flex: 1,
           padding: 20,
         }}>
-        {!user.username && <Spinner />}
-        {user.username && (
+        {!userName && <Spinner />}
+        {userName && (
           <>
-            <Thumbnail large source={{uri: user.profileImageBase64 || uri}} />
-            <Text style={{marginTop: 10}}>{user.username}</Text>
+            {/* <Thumbnail large source={{uri: uprofileImageBase64 || uri}} /> */}
+            <Text style={{marginTop: 10}}>{userName}</Text>
             <Text style={{marginTop: 10}}>Punkty: 1234</Text>
             <View
               style={{
@@ -144,7 +144,7 @@ export const EditOtherProfileScreen = ({navigation}: Props) => {
                     rating={starsCount}
                     selectedStar={(rating: any) => onStarRatingPress(rating)}
                 />
-                <Button onPress={handleSubmit(starsCount)} full style={{marginTop: 10}}>
+                <Button full style={{marginTop: 10}}>
                     <Text>Zapisz</Text>
                 </Button>
             </View>

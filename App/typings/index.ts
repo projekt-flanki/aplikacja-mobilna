@@ -45,6 +45,7 @@ export interface EventUserDetails {
 
 export interface EventDetailsPayload extends NewEventPayload{
   id: string;
+  result: string;
   owners: EventUserDetails[];
   firstTeam: EventUserDetails[];
   secondTeam: EventUserDetails[];

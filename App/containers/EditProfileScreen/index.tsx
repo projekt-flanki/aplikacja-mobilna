@@ -136,7 +136,7 @@ export const EditProfile = ({navigation}: Props) => {
                     onBlur={handleBlur('username')}
                   />
                   <StarRating
-                    disabled={false}
+                    disabled={true}
                     maxStars={5}
                     rating={starsCount}
                     selectedStar={(rating: any) => onStarRatingPress(rating)}

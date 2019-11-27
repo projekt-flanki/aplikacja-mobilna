@@ -39,7 +39,8 @@ export const EventDetailsScreens = ({ navigation }: Props) => {
   const [firstTeam, setFirstTeam] = useState<EventUserDetails[]>([])
   const [secondTeam, setSecondTeam] = useState<EventUserDetails[]>([])
   const [owner, setOwner] = useState<EventUserDetails>()
-  
+  const [result, setResult] = useState('')
+
   const assignToEvent = (eventId: any) => () => {
         api.assignEvent({ eventId }).then(({ok, data}: ApiResponse<any>) => {
           if (ok) {
@@ -94,6 +95,7 @@ export const EventDetailsScreens = ({ navigation }: Props) => {
           date,
           description,
           name,
+          result,
           owners,
         } = data as EventDetailsPayload
         setId(id)
@@ -107,6 +109,7 @@ export const EventDetailsScreens = ({ navigation }: Props) => {
         setFirstTeam(firstTeam)
         setSecondTeam(secondTeam)
         setOwner(owners[0])
+        setResult(result)
       }
     })
   }
@@ -183,9 +186,16 @@ export const EventDetailsScreens = ({ navigation }: Props) => {
               )}
             </View>
           </View>
-          <Button onPress={inEvent ? quitEvent(id) : assignToEvent(id)}>
+          { result === null &&
+          <Button  onPress={inEvent ? quitEvent(id) : assignToEvent(id)}>
             <Text>{inEvent ? "Wypisz sie z eventu" : "Zapisz sie do eventu"}</Text>
           </Button>
+          }
+          {result !== null && 
+          <Text style={{fontWeight: 'bold', textAlign: 'center', marginTop: 10, fontSize: 20, color: result === 'FIRST_TEAM_WON' ? 'blue' : 'green'}}>
+            Wygrala druzyna {result === 'FIRST_TEAM_WON' ? 'niebieska': 'zielona'}
+            </Text>
+            }
       </Content>
     </Container>
   );

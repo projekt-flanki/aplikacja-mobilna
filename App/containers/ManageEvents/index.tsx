@@ -164,12 +164,13 @@ export const ManageEvents = ({ navigation }: Props) => {
     api.teamWin({
       eventId: id,
       teamNumber: teamId
-    }).then(() => {
+    }).then((data) => {
       Toast.show({
         type: 'success',
         text: `Druzyna ${teamId === 0 ? 'niebieska': 'zielona'} wygrala`,
         buttonText: 'Ok', 
       });
+      fetchEventData(id)
     })
   }
 

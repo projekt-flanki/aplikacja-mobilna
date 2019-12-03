@@ -34,3 +34,19 @@ export interface AssignEventPayload{
 export interface TeamWinPayload extends AssignEventPayload{
   teamNumber: Number;
 }
+
+export interface EventUserDetails {
+  email :string;
+  id: string;
+  points: number;
+  rating: string;
+  username: string;
+}
+
+export interface EventDetailsPayload extends NewEventPayload{
+  id: string;
+  result: string;
+  owners: EventUserDetails[];
+  firstTeam: EventUserDetails[];
+  secondTeam: EventUserDetails[];
+}

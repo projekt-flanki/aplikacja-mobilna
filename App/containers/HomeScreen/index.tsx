@@ -22,6 +22,7 @@ import {UserInfoPayload} from '../../typings';
 import {ApiResponse} from 'apisauce';
 import {DrawerActions} from 'react-navigation-drawer';
 import * as events from 'events';
+import { User } from '../../utils/User';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -40,6 +41,7 @@ export const HomeScreen = ({navigation}: Props) => {
   }>({});
 
   const [starsCount, setStarCount] = useState();
+  const [points, setPoints] = useState(0);
 
   const starListArray = [];
 
@@ -56,7 +58,9 @@ export const HomeScreen = ({navigation}: Props) => {
     api.getUserInfo().then(({data, ok}: ApiResponse<any>) => {
       if (ok) {
         setUser(data);
+        User.userId = data.id;
         setStarCount(data.rating);
+        setPoints(data.points)
       } else {
         Toast.show({
           type: 'danger',
@@ -95,7 +99,7 @@ export const HomeScreen = ({navigation}: Props) => {
           <>
             <Thumbnail large source={{uri: user.profileImageBase64 || uri}} />
             <Text style={{marginTop: 10}}>{user.username}</Text>
-            <Text style={{marginTop: 10}}>Punkty: 1234</Text>
+            <Text style={{marginTop: 10}}>Punkty: {points}</Text>
             <View
               style={{
                 marginTop: 10,

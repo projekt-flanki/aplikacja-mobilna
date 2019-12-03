@@ -24,6 +24,7 @@ import {DrawerActions} from 'react-navigation-drawer';
 import {ApiResponse} from 'apisauce';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import dayjs from 'dayjs';
+import { EventDetailsPayload, EventUserDetails } from 'App/typings';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -44,34 +45,53 @@ export const ManageEvents = ({ navigation }: Props) => {
   const [showMap, setShowMap] = useState(false);
   const [wasMapOpened, setMapOpened] = useState(false);
   const [ownerIds, setOwnerId] = useState(['test']);
+  const [firstTeam, setFirstTeam] = useState<EventUserDetails[]>([])
+  const [secondTeam, setSecondTeam] = useState<EventUserDetails[]>([])
   const [positionData, setPositionData] = useState({
-    latitude: 51.7833,
-    longitude: 19.4667,
+    latitude: 51.752747,
+    longitude: 19.453246,
   });
-  
-  const initialValues = {
-      ownerIds,
-      eventname,
-      location,
-      date,
-      description
-  };
-  const haveParams = navigation.state.params != undefined
+  const [result, setResult] = useState('')
+
+  const haveParams = navigation.state.params !== undefined
+
+  const fetchEventData = (id: string) => {
+    api.getEventDetails(id).then(({data, ok}) => {
+      if(ok) {
+        const {
+          id,
+          firstTeam,
+          secondTeam,
+          longitude,
+          latitude,
+          date,
+          description,
+          name,
+          result
+        } = data as EventDetailsPayload
+        setDescription(description)
+        setDate(date)
+        setEventName(name)
+        setPositionData({
+          latitude,
+          longitude
+        })
+        setFirstTeam(firstTeam)
+        setSecondTeam(secondTeam)
+        setId(id)
+        console.log(result)
+        setResult(result)
+      }
+    })
+  }
+
 
   useEffect(() => {
-    if (haveParams && navigation.state.params != undefined) {
-      const event = navigation.state.params.eventObject;
-      setEventName(event.name);
-      setDescription(event.description);
-      setPositionData({
-        latitude: event.latitude,
-        longitude: event.longitude
-      });
-      setId(event.id);
-      setDate(event.date);
-      setOwnerId(event.ownerIds);
+    if (haveParams && navigation.state.params !== undefined) {
+      const id = navigation.state.params.eventObject.id;
+      fetchEventData(id)
     }
-  });
+  }, []);
    
   
   const handleEdit = (
@@ -107,7 +127,7 @@ export const ManageEvents = ({ navigation }: Props) => {
   };
 
   const handleSubmit = (
-    {eventname, date, description}: typeof initialValues,
+    {eventname, date, description}: any,
     {setFieldError}: any,
   ) => {
     if (!wasMapOpened) {
@@ -144,18 +164,29 @@ export const ManageEvents = ({ navigation }: Props) => {
     api.teamWin({
       eventId: id,
       teamNumber: teamId
-    }).then(() => {
+    }).then((data) => {
       Toast.show({
         type: 'success',
-        text: `Druzyna ${teamId + 1} won`,
+        text: `Druzyna ${teamId === 0 ? 'niebieska': 'zielona'} wygrala`,
         buttonText: 'Ok', 
       });
+      fetchEventData(id)
     })
   }
 
-  if(haveParams && id === '') return <Spinner/>
+  if(haveParams && id === '') return <Spinner style={{marginTop: 200}}/>
+
+  const initialValues = {
+      ownerIds,
+      eventname,
+      location,
+      date,
+      description
+  };
+  const isFromPast = dayjs(date).isBefore(dayjs())
+
   return (
-    
+
     <Container>
       <Header>
         <Left>
@@ -186,6 +217,7 @@ export const ManageEvents = ({ navigation }: Props) => {
             left: 0,
             right: 0,
             bottom: 0,
+            zIndex: 0,
             ...(!showMap && {opacity: 0, zIndex: -1}),
           }}
           showsUserLocation
@@ -211,17 +243,19 @@ export const ManageEvents = ({ navigation }: Props) => {
             description={'test'}
           />
         </MapView>
-        <Button
-          onPress={() => setShowMap(false)}
-          dark
-          style={{
+        <View style={{
             position: 'absolute',
             top: 10,
             left: 10,
-            ...(!showMap && {height: 0, width: 0, opacity: 0}),
-          }}>
+            zIndex: 1234,
+            ...(!showMap && {height: 0, width: 0, opacity: 0})}}>
+        <Button
+          onPress={() => setShowMap(false)}
+          dark
+          >
           <Text>Accept</Text>
         </Button>
+        </View>
         <Form>
           <Formik
             initialValues={initialValues}
@@ -244,13 +278,15 @@ export const ManageEvents = ({ navigation }: Props) => {
                     onChange={handleChange('eventname')}
                     error={touched.eventname && (errors.eventname as string)}
                     onBlur={handleBlur('eventname')}
+                    disabled={isFromPast}
                   />
                   <Input
                     onClick={() => {
+                      if(isFromPast) return
                       setMapOpened(true);
                       setShowMap(true);
                     }}
-                    disabled
+                    disabled={isFromPast}
                     value={
                       !wasMapOpened && !id
                         ? ''
@@ -264,6 +300,7 @@ export const ManageEvents = ({ navigation }: Props) => {
                     onBlur={handleBlur('location')}
                   />
                   <Input
+                    disabled={isFromPast}
                     value={description}
                     label="Opis wydarzenia"
                     onChange={handleChange('description')}
@@ -276,7 +313,7 @@ export const ManageEvents = ({ navigation }: Props) => {
                   <Text> Wybierz datę</Text>
                   <DatePicker
                     defaultDate={new Date()}
-                    minimumDate={new Date()}
+                    // minimumDate={new Date()}
                     maximumDate={new Date(2021, 12, 31)}
                     locale={'pl'}
                     timeZoneOffsetInMinutes={undefined}
@@ -291,20 +328,43 @@ export const ManageEvents = ({ navigation }: Props) => {
                       backgroundColor: '#B4BEC5',
                     }}
                     onDateChange={handleChange('date')}
-                    disabled={false}
+                    disabled={isFromPast}
                   />
+                  {id !== '' && <>
+                  <View style={{width: '80%', marginTop: 10, paddingLeft: '5%', display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{width:'60%', padding: 10, borderColor: 'blue', borderWidth: 1}}>
+                      <Text style={{fontWeight: 'bold', alignSelf: 'center'}}>Druzyna niebieska</Text>
+                        {firstTeam.map(({username}) =>
+                          <Text>- {username}</Text>
+                          )}
+                    </View>
+                    <View style={{width:'60%', padding: 10, borderColor: 'green', borderWidth: 1}}>
+                      <Text style={{fontWeight: 'bold', alignSelf: 'center'}}>Druzyna zielona</Text>
+                      {secondTeam.map(({username}) =>
+                        <Text>- {username}</Text>
+                        )}
+                    </View>
+                  </View>
 
-                  <Button onPress={handleSubmit} full style={{marginTop: 10}}>
-                    <Text>{id?'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
+                      </>}
+                  {!isFromPast && <Button onPress={handleSubmit} full style={{marginTop: 10}}>
+                      <Text>{id ? 'Edytuj wydarzenie':'Stwórz wydarzenie'}</Text>
+                  </Button>}
+                  { isFromPast && id !== '' && result === null&& <>  
+                  <Button full style={{marginTop:10}} onPress={teamWonAction(0)}>
+                    <Text>Wygrala druzyna niebieska</Text>
                   </Button>
-                  {dayjs(date).isAfter(dayjs()) && id && <>
-                  <Button onPress={teamWonAction(0)}>
-                    <Text>Wygrala druzyna 1</Text>
-                  </Button>
-                  <Button onPress={teamWonAction(1)}>
-                    <Text>Wygrala druzyna 2</Text>  
+                  <Button full style={{marginTop:10}}  onPress={teamWonAction(1)}>
+                    <Text>Wygrala druzyna zielona</Text>  
                   </Button>
                   </>}
+                  {isFromPast && id !== '' && result !== null && 
+                  <Text style={{fontWeight: 'bold', textAlign: 'center', marginTop: 10, fontSize: 20, color: result === 'FIRST_TEAM_WON' ? 'blue' : 'green'}}>
+                    Wygrala druzyna {result === 'FIRST_TEAM_WON' ? 'niebieska': 'zielona'}
+                    </Text>}
+                    <Text style={{color: 'white'}}>
+                      asasjfaijafiafsijafsijf asdjasdsaj adsj da ads das s 
+                    </Text>    
                 </View>
               );
             }}

@@ -27,7 +27,7 @@ export const Input = ({
       <Item
         onPress={onClick}
         error={!!error}
-        style={{marginTop: 10}}
+        style={{marginTop: 10, backgroundColor: disabled ? 'grey': 'white'}}
         regular
         stackedLabel
         last>
